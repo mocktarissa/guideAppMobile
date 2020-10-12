@@ -12,10 +12,11 @@ import {
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import { BarCodeScanner } from "expo-barcode-scanner";
 import Homepage from "./components/Homepage";
 import Welcome from "./components/Welcome";
 import Scan from "./components/Scan";
+import Attraction from "./components/Attraction";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -54,6 +55,7 @@ export default function App() {
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="Homepage" component={Homepage} />
         <Stack.Screen name="Scan" component={Scan} />
+        <Stack.Screen name="Attraction" component={Attraction} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -4,33 +4,20 @@ import { Text, View, StyleSheet, Button } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-export default function Homepage({ navigation }) {
-  const [places, setPlaces] = useState([
-    {
-      name: "Viasea",
-      location: "112112",
-      id: 1,
-    },
-  ]);
-  function handleChange(newValue) {
-    setPlaces(newValue);
-  }
+export default function Attraction({ navigation, route }) {
+  const { attraction } = route.params;
 
   return (
     <View style={styles.container}>
-      <Text>Hello from the Home Page </Text>
-      {places.map((p) => (
-        <Text key={p.id}>{p.name}</Text>
-      ))}
+      <Text>
+        Hello from the Page
+        {attraction}
+      </Text>
+
       <View style={styles.bottom}>
         <Button
-          title="Scan QR"
-          onPress={() =>
-            navigation.navigate("Scan", {
-              places: places,
-              handleChange: handleChange,
-            })
-          }
+          title="Home Page"
+          onPress={() => navigation.navigate("Homepage")}
         ></Button>
       </View>
     </View>
