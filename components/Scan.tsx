@@ -8,7 +8,7 @@
 //     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
 //     style={StyleSheet.absoluteFillObject}
 //   />
-// Add api support
+
 import { View, StyleSheet, Button, Text } from "react-native";
 import React, { useState } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
