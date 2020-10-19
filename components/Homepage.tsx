@@ -1,25 +1,68 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 
 import { Text, View, StyleSheet, Button } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import Axios from "axios";
 export default function Homepage({ navigation }) {
-  const [places, setPlaces] = useState([
+  const [companies, setCompanies] = useState([
     {
-      name: "Viasea",
-      location: "112112",
       id: 1,
+      name: "Addidas",
+      address: "Addidas street",
+      phone_number: "+3540430022",
+      website: "https://www.addidas.com/",
+      longlatt: "",
+    },
+    {
+      id: 2,
+      name: "istanbul university",
+      address: "cakmakli mah masuk sok bin no 4",
+      phone_number: "05537913079",
+      website: "https://www.mocktarissa.com\\",
+      longlatt: "",
+    },
+    {
+      id: 3,
+      name: "istanbul university",
+      address: "cakmakli mah masuk sok bin no 4",
+      phone_number: "3334455",
+      website: "https://movs4u.tv",
+      longlatt: "",
+    },
+    {
+      id: 4,
+      name: "istanbul university",
+      address: "cakmakli mah masuk sok bin no 4",
+      phone_number: "055379130793",
+      website: "https://www.dmocktarissa.com\\",
+      longlatt: "",
+    },
+    {
+      id: 7,
+      name: "istanbul university",
+      address: "cakmakli mah masuk sok bin no 4",
+      phone_number: "256521725712",
+      website: "https://jdsds.cid",
+      longlatt: "",
     },
   ]);
-  function handleChange(newValue) {
-    setPlaces(newValue);
-  }
 
+  function handleChange(newValue) {
+    setCompanies(newValue);
+  }
+  // async function fetchItem() {
+  //   let res = JSON.parse(
+  //     (await Axios.get("http://192.168.1.13:8000/api/company/")).data
+  //   );
+  //   setCompanies(res);
+  //   alert(res.length);
+  // }
   return (
     <View style={styles.container}>
       <Text>Hello from the Home Page </Text>
-      {places.map((p) => (
+      {companies.map((p) => (
         <Text key={p.id}>{p.name}</Text>
       ))}
       <View style={styles.bottom}>
@@ -27,7 +70,7 @@ export default function Homepage({ navigation }) {
           title="Scan QR"
           onPress={() =>
             navigation.navigate("Scan", {
-              places: places,
+              companies: companies,
               handleChange: handleChange,
             })
           }
