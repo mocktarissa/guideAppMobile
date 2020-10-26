@@ -9,6 +9,7 @@ import {
   Button,
   Text,
   Icon,
+  Spinner,
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 
@@ -36,14 +37,22 @@ export default function Homepage({ navigation }) {
     setPlaces(newValue);
   }
   const Stack = createStackNavigator();
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <Container>
       {/* <Header /> */}
       <Content>
         <List>
           {places.map((item) => {
             return (
-              <ListItem>
+              <ListItem
+                onPress={() =>
+                  navigation.navigate("CompanyDetails", {
+                    companyId: item.id,
+                  })
+                }
+              >
                 <Grid>
                   <Col style={{ height: 20, width: 20 }}>
                     <Icon
@@ -56,15 +65,7 @@ export default function Homepage({ navigation }) {
                     ></Icon>
                   </Col>
                   <Col style={{ height: 20, width: "60%" }}>
-                    <Text
-                      onPress={() =>
-                        navigation.navigate("CompanyDetails", {
-                          companyId: item.id,
-                        })
-                      }
-                    >
-                      {item.name}
-                    </Text>
+                    <Text>{item.name}</Text>
                   </Col>
                   <Col style={{ height: 20, width: "10%" }}>
                     <Icon
@@ -90,18 +91,7 @@ export default function Homepage({ navigation }) {
             );
           })}
         </List>
-        <Content>
-          <Button
-            onPress={() =>
-              navigation.navigate("Scan", {
-                places: places,
-                handleChange: handleChange,
-              })
-            }
-          >
-            <Text>Scan QR</Text>
-          </Button>
-        </Content>
+        <Content></Content>
       </Content>
     </Container>
   );

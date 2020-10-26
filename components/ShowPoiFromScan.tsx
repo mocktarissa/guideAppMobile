@@ -11,7 +11,8 @@ import {
   Icon,
   Left,
   Body,
-  Spinner,
+  DeckSwiper,
+  Image,
 } from "native-base";
 import { View, StyleSheet } from "react-native";
 
@@ -19,28 +20,25 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import axios from "axios";
 import Loading from "./Loading";
-export default function PoiProfile({ navigation, route }) {
-  const { poiId } = route.params;
+export default function ShowPoiFromScan({ navigation, route }) {
+  const { data } = route.params;
   const { companyId } = route.params;
-  const [poi, setPoi] = useState({});
-  const [category, setCategory] = useState({});
+  const [poi, setPoi] = useState(data[0]);
+  const [category, setCategory] = useState(data[0].category);
   const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios(
-        `http://myguideapi.herokuapp.com/api/company/${companyId}/pois/${poiId}`
-      );
-      setPoi(result.data[0]);
-      setCategory(result.data[0].category);
-      setIsLoading(false);
-    };
 
-    fetchData();
-  }, []);
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       const result = await axios(
+  //         `http://myguideapi.herokuapp.com/api/company/${companyId}/pois/${poiId}`
+  //       );
+  //
+  //     };
 
-  return isLoading ? (
-    <Spinner />
-  ) : (
+  //     fetchData();
+  //   }, []);
+
+  return (
     <Container>
       <Content>
         <Card style={{ flex: 0 }}>
@@ -55,6 +53,9 @@ export default function PoiProfile({ navigation, route }) {
           <CardItem>
             <Body>
               <Text>{poi.description}</Text>
+              <Text>
+                http://myguideapi.herokuapp.com/storage/${poi.picture1}
+              </Text>
             </Body>
           </CardItem>
           <CardItem>

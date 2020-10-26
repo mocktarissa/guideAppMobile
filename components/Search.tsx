@@ -10,6 +10,9 @@ import {
   Text,
   Icon,
   Right,
+  Item,
+  Input,
+  Spinner,
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 
@@ -24,54 +27,53 @@ import ListCompany from "./ListCompany";
 import CompanyDetails from "./CompanyDetails";
 import PoiProfile from "./PoiProfile";
 import ShowPoiFromScan from "./ShowPoiFromScan";
-export default function Homepage({ navigation }) {
-  const [places, setPlaces] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+export default function Search({ navigation }) {
+  const [query, setQuery] = useState("");
+  const [result, setResult] = useState({ name: "Search" });
+  const [company, setCompany] = useState([]);
+  const [searching, setSearching] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(
         "http://myguideapi.herokuapp.com/api/company/"
       );
-      setPlaces(result.data);
-      setIsLoading(false);
+      setCompany(result.data);
     };
-
     fetchData();
   }, []);
-  function handleChange(newValue) {
-    setCompanies(newValue);
+  function search() {
+    setSearching(true);
+    let isfound = company.find((e) => e.name === query);
+    if (isfound) {
+      setResult(isfound);
+    } else setResult({ name: "Not Found" });
+    setSearching(false);
   }
-  // async function fetchItem() {
-  //   let res = JSON.parse(
-  //     (await Axios.get("http://192.168.1.13:8000/api/company/")).data
-  //   );
-  //   setCompanies(res);
-  //   alert(res.length);
-  // }
-  const HomeStack = createStackNavigator();
   return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen
-        name="AttractionList"
-        component={ListCompany}
-        options={{ tabBarLabel: "Home!" }}
-      />
-      <HomeStack.Screen
-        name="CompanyDetails"
-        component={CompanyDetails}
-        options={{ tabBarLabel: "Home!" }}
-      />
-      <HomeStack.Screen
-        name="PoiProfile"
-        component={PoiProfile}
-        options={{ tabBarLabel: "Home!" }}
-      />
-      <HomeStack.Screen
-        name="ShowPoiFromScan"
-        component={ShowPoiFromScan}
-        options={{ tabBarLabel: "Home!" }}
-      />
-    </HomeStack.Navigator>
+    <Container>
+      <Header searchBar rounded>
+        <Item>
+          <Icon name="ios-search" />
+          <Input placeholder="Search" onChangeText={(text) => setQuery(text)} />
+          <Icon name="ios-people" />
+        </Item>
+      </Header>
+      {searching ? <Spinner /> : <></>}
+
+      <Button onPress={() => search()}>
+        <Text>Search</Text>
+      </Button>
+      <Text style={{ padding: 10, fontSize: 42 }}>
+        {result.name ? (
+          <Item>
+            <Icon name="add" />
+            <Text>{result.name}</Text>
+          </Item>
+        ) : (
+          ""
+        )}
+      </Text>
+    </Container>
   );
 }
 

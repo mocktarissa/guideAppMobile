@@ -12,6 +12,7 @@ import {
   Left,
   Body,
   Right,
+  Spinner,
 } from "native-base";
 import { Image } from "react-native";
 
@@ -53,7 +54,9 @@ export default function CompanyDetails({ navigation, route }) {
   </Content>
 </Container>; */
   }
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <Container>
       <Content>
         {pois.map((item) => {
