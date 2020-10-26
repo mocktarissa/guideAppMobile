@@ -35,9 +35,15 @@ export default function Homepage({ navigation }) {
     fetchData();
   }, []);
   function handleChange(newValue) {
-    setPlaces(newValue);
+    setCompanies(newValue);
   }
-
+  // async function fetchItem() {
+  //   let res = JSON.parse(
+  //     (await Axios.get("http://192.168.1.13:8000/api/company/")).data
+  //   );
+  //   setCompanies(res);
+  //   alert(res.length);
+  // }
   return (
     <Container>
       {/* <Header /> */}
