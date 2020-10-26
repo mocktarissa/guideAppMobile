@@ -14,8 +14,7 @@ import React, { useState } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { nativeTheme } from "electron";
 
-export default function Scan({ navigation, route }) {
-  const { places, handleChange } = route.params;
+export default function Scan({ navigation }) {
   const [scanned, setScanned] = useState(false);
   const [qrCode, SetqrCode] = useState(false);
   const [isAllerted, setisAlerted] = useState(false);
@@ -23,13 +22,6 @@ export default function Scan({ navigation, route }) {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    handleChange([
-      ...places,
-      { name: data, id: parseInt(Math.random() * 100) },
-    ]);
-    navigation.navigate("Attraction", {
-      attraction: data,
-    });
   };
   return (
     <View

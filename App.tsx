@@ -17,6 +17,11 @@ import Homepage from "./components/Homepage";
 import Welcome from "./components/Welcome";
 import Scan from "./components/Scan";
 import Attraction from "./components/Attraction";
+import CompanyDetails from "./components/CompanyDetails";
+import PoiProfile from "./components/PoiProfile";
+import BottomNav from "./components/FooterTab";
+
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -25,7 +30,7 @@ export default function App() {
   const [gezzi, setGezzi] = useState([{}]);
   const [qrCode, SetqrCode] = useState(false);
   const [isAllerted, setisAlerted] = useState(false);
-
+  const [isFirstOpening, SetIsFirstOpening] = useState(true);
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -50,16 +55,27 @@ export default function App() {
     // <View style={styles.container}>
 
     // </View>
+
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Welcome" component={Welcome} />
+        {/* <Stack.Screen name="Welcome" component={Welcome} /> */}
         <Stack.Screen name="Homepage" component={Homepage} />
         <Stack.Screen name="Scan" component={Scan} />
         <Stack.Screen name="Attraction" component={Attraction} />
+        <Stack.Screen name="CompanyDetails" component={CompanyDetails} />
+        <Stack.Screen name="PoiProfile" component={PoiProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+// <Tab.Navigator>
+//   {/* <Stack.Screen name="Welcome" component={Welcome} /> */}
+//   <Tab.Screen name="Homepage" component={Homepage} />
+//   <Tab.Screen name="Scan" component={Scan} />
+//   <Tab.Screen name="Attraction" component={Attraction} />
+//   <Tab.Screen name="CompanyDetails" component={CompanyDetails} />
+//   <Tab.Screen name="PoiProfile" component={PoiProfile} />
+// </Tab.Navigator>;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

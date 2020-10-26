@@ -9,7 +9,6 @@ import {
   Button,
   Text,
   Icon,
-  Right,
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 
@@ -19,7 +18,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import BottomNav from "./FooterTab";
 import axios from "axios";
-import Loading from "./Loading";
 export default function Homepage({ navigation }) {
   const [places, setPlaces] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,7 +35,7 @@ export default function Homepage({ navigation }) {
   function handleChange(newValue) {
     setPlaces(newValue);
   }
-
+  const Stack = createStackNavigator();
   return (
     <Container>
       {/* <Header /> */}
@@ -45,13 +43,7 @@ export default function Homepage({ navigation }) {
         <List>
           {places.map((item) => {
             return (
-              <ListItem
-                onPress={() =>
-                  navigation.navigate("CompanyDetails", {
-                    companyId: item.id,
-                  })
-                }
-              >
+              <ListItem>
                 <Grid>
                   <Col style={{ height: 20, width: 20 }}>
                     <Icon
@@ -64,7 +56,25 @@ export default function Homepage({ navigation }) {
                     ></Icon>
                   </Col>
                   <Col style={{ height: 20, width: "60%" }}>
-                    <Text>{item.name}</Text>
+                    <Text
+                      onPress={() =>
+                        navigation.navigate("CompanyDetails", {
+                          companyId: item.id,
+                        })
+                      }
+                    >
+                      {item.name}
+                    </Text>
+                  </Col>
+                  <Col style={{ height: 20, width: "10%" }}>
+                    <Icon
+                      name="see"
+                      style={{
+                        fontSize: 20,
+                        height: "100%",
+                        width: "100%",
+                      }}
+                    ></Icon>
                   </Col>
                   <Col>
                     <Button
@@ -75,9 +85,6 @@ export default function Homepage({ navigation }) {
                       <Text>Show in map</Text>
                     </Button>
                   </Col>
-                  <Right>
-                    <Icon name="arrow-forward" />
-                  </Right>
                 </Grid>
               </ListItem>
             );
@@ -99,38 +106,6 @@ export default function Homepage({ navigation }) {
     </Container>
   );
 }
-
-// <View style={styles.container}>
-//   <Text>{places.length}</Text>
-//   {isLoading ? <Text> Loading</Text> : <Text>Loaded</Text>}
-//   <FlatList
-//     data={places}
-//     renderItem={({ item }) => (
-//       <Text
-//         style={styles.item}
-//         onPress={() =>
-//           navigation.navigate("CompanyDetails", {
-//             companyId: item.id,
-//           })
-//         }
-//       >
-//         {item.name}
-//       </Text>
-//     )}
-//   />
-
-//   <View style={styles.bottom}>
-//     <Button
-//       title="Scan QR"
-//       onPress={() =>
-//         navigation.navigate("Scan", {
-//           places: places,
-//           handleChange: handleChange,
-//         })
-//       }
-//     ></Button>
-//   </View>
-// </View>
 
 const styles = StyleSheet.create({
   container: {
