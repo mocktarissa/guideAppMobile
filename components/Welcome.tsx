@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, AsyncStorage } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
