@@ -27,6 +27,7 @@ export default function Homepage({ navigation }) {
       const result = await axios(
         "http://myguideapi.herokuapp.com/api/company/"
       );
+
       setPlaces(result.data);
       setIsLoading(false);
     };

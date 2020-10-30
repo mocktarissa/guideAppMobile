@@ -34,6 +34,29 @@ export default function CompanyDetails({ navigation, route }) {
       const result = await axios(
         `http://myguideapi.herokuapp.com/api/company/${companyId}/pois`
       );
+      // var temp = result.data.reduce(
+      //   function (r, item) {
+      //     var current = r.hash[item.category.name];
+
+      //     if (!current) {
+      //       current = r.hash[item.category.name] = {
+      //         category: item.category.name,
+      //         items: [],
+      //       };
+
+      //       r.arr.push(current);
+      //     }
+
+      //     current.items.push({
+      //       id: item.id,
+      //       company_id
+      //       content: item.content,
+      //     });
+
+      //     return r;
+      //   },
+      //   { hash: {}, arr: [] }
+      // ).arr;
       setPois(result.data);
       setIsLoading(false);
     };
