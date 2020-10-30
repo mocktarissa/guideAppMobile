@@ -12,8 +12,10 @@ import {
   Left,
   Body,
   Spinner,
+  Grid,
+  List,
 } from "native-base";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -43,29 +45,34 @@ export default function PoiProfile({ navigation, route }) {
   ) : (
     <Container>
       <Content>
-        <Card style={{ flex: 0 }}>
-          <CardItem>
-            <Left>
+        <List>
+          <Card>
+            <CardItem>
+              <Left>
+                <Body>
+                  <Text>{poi.name}</Text>
+                  <Text note>{category["name"]}</Text>
+                </Body>
+              </Left>
+            </CardItem>
+            <CardItem>
               <Body>
-                <Text>{poi.name}</Text>
-                <Text note>{category["name"]}</Text>
+                <Text>{poi.description}</Text>
               </Body>
-            </Left>
-          </CardItem>
-          <CardItem>
-            <Body>
-              <Text>{poi.description}</Text>
-            </Body>
-          </CardItem>
-          <CardItem>
-            <Left>
-              <Button transparent textStyle={{ color: "#87838B" }}>
-                <Icon name="thumbs-up" />
-                <Text>1,926 likes</Text>
-              </Button>
-            </Left>
-          </CardItem>
-        </Card>
+            </CardItem>
+            <CardItem>
+              <Left>
+                <Button transparent textStyle={{ color: "#87838B" }}>
+                  <Icon name="thumbs-up" />
+                  <Text>1,926 likes</Text>
+                </Button>
+              </Left>
+            </CardItem>
+          </Card>
+          <Card>
+            <CardItem style={styles.image}></CardItem>
+          </Card>
+        </List>
       </Content>
     </Container>
   );
@@ -110,5 +117,11 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     height: 44,
+  },
+  image: {
+    backgroundColor: "grey",
+    height: "100%",
+    margin: 2,
+    width: "100%",
   },
 });
