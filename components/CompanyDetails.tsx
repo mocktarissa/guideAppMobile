@@ -12,6 +12,10 @@ import {
   Left,
   Body,
   Right,
+  Spinner,
+  Grid,
+  Col,
+  Row,
 } from "native-base";
 import { Image } from "react-native";
 
@@ -30,6 +34,29 @@ export default function CompanyDetails({ navigation, route }) {
       const result = await axios(
         `http://myguideapi.herokuapp.com/api/company/${companyId}/pois`
       );
+      // var temp = result.data.reduce(
+      //   function (r, item) {
+      //     var current = r.hash[item.category.name];
+
+      //     if (!current) {
+      //       current = r.hash[item.category.name] = {
+      //         category: item.category.name,
+      //         items: [],
+      //       };
+
+      //       r.arr.push(current);
+      //     }
+
+      //     current.items.push({
+      //       id: item.id,
+      //       company_id
+      //       content: item.content,
+      //     });
+
+      //     return r;
+      //   },
+      //   { hash: {}, arr: [] }
+      // ).arr;
       setPois(result.data);
       setIsLoading(false);
     };
@@ -53,30 +80,21 @@ export default function CompanyDetails({ navigation, route }) {
   </Content>
 </Container>; */
   }
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <Container>
       <Content>
         {pois.map((item) => {
           return (
-            <Card key={item.id}>
-              <CardItem>
-                <Text
-                  style={styles.item}
-                  onPress={() =>
-                    navigation.navigate("PoiProfile", {
-                      poiId: item.id,
-                      companyId: companyId,
-                    })
-                  }
-                >
-                  {item.name}
-                </Text>
-                <Text note> {item.location} </Text>
-              </CardItem>
-              <CardItem cardBody>
-                <Left>
-                  <Text
-                    style={styles.item}
+            <Content>
+              <Card key={item.id} style={{ height: 150 }}>
+                <Grid style={styles.selfContained}>
+                  <Col style={{ height: "100%", width: "30%" }}>
+                    <CardItem style={styles.image}></CardItem>
+                  </Col>
+                  <Col
+                    style={{ maxHeight: "100%", width: "70%" }}
                     onPress={() =>
                       navigation.navigate("PoiProfile", {
                         poiId: item.id,
@@ -84,16 +102,27 @@ export default function CompanyDetails({ navigation, route }) {
                       })
                     }
                   >
-                    {item.category.name}
-                  </Text>
-                </Left>
-                <Button
-                  onPress={() => Linking.openURL("google.navigation:q=100+101")}
-                >
-                  <Text>Go</Text>
-                </Button>
-              </CardItem>
-            </Card>
+                    <CardItem>
+                      <Text style={styles.item}>{item.name}</Text>
+                    </CardItem>
+                    <CardItem>
+                      <Text note> {item.location} </Text>
+                    </CardItem>
+                    <CardItem cardBody style={styles.mapBtnContainer}>
+                      <Button
+                        transparent
+                        style={styles.mapBtn}
+                        onPress={() =>
+                          Linking.openURL("google.navigation:q=100+101")
+                        }
+                      >
+                        <Text>Show in Map</Text>
+                      </Button>
+                    </CardItem>
+                  </Col>
+                </Grid>
+              </Card>
+            </Content>
           );
         })}
       </Content>
@@ -108,7 +137,7 @@ const styles = StyleSheet.create({
   },
   listRow: {
     position: "absolute",
-    height: 20,
+    height: 50,
   },
   title: {
     textAlign: "center",
@@ -137,8 +166,26 @@ const styles = StyleSheet.create({
     marginBottom: 36,
   },
   item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
+    fontSize: 20,
+    // height: 20,
+  },
+  image: {
+    backgroundColor: "grey",
+    width: "100%",
+    height: "100%",
+  },
+  mapBtnContainer: {
+    width: "2000%",
+    // marginLeft: "10%",
+  },
+  mapBtn: {
+    width: "100%",
+    height: "100%",
+  },
+  selfContained: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

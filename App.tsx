@@ -15,6 +15,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import Homepage from "./components/Homepage";
 import Welcome from "./components/Welcome";
+import Search from "./components/Search";
 import Scan from "./components/Scan";
 import Attraction from "./components/Attraction";
 import CompanyDetails from "./components/CompanyDetails";
@@ -23,7 +24,7 @@ import BottomNav from "./components/FooterTab";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const Stack = createStackNavigator();
-
+const Tab = createBottomTabNavigator();
 export default function App() {
   const [hasPermission, setHasPermission] = useState(null);
 
@@ -57,17 +58,22 @@ export default function App() {
     // </View>
 
     <NavigationContainer>
-      <Stack.Navigator>
-        {/* <Stack.Screen name="Welcome" component={Welcome} /> */}
-        <Stack.Screen name="Homepage" component={Homepage} />
-        <Stack.Screen name="Scan" component={Scan} />
-        <Stack.Screen name="Attraction" component={Attraction} />
-        <Stack.Screen name="CompanyDetails" component={CompanyDetails} />
-        <Stack.Screen name="PoiProfile" component={PoiProfile} />
-      </Stack.Navigator>
+      <Tab.Navigator>
+        <Tab.Screen name="Homepage" component={Homepage} />
+        <Tab.Screen name="Search" component={Search} />
+        <Tab.Screen name="Scan" component={Scan} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
+// <Stack.Navigator>
+//   {/* <Stack.Screen name="Welcome" component={Welcome} /> */}
+//   <Stack.Screen name="Homepage" component={Homepage} />
+//   <Stack.Screen name="Scan" component={Scan} />
+//   <Stack.Screen name="Attraction" component={Attraction} />
+//   <Stack.Screen name="CompanyDetails" component={CompanyDetails} />
+//   <Stack.Screen name="PoiProfile" component={PoiProfile} />
+// </Stack.Navigator>
 // <Tab.Navigator>
 //   {/* <Stack.Screen name="Welcome" component={Welcome} /> */}
 //   <Tab.Screen name="Homepage" component={Homepage} />

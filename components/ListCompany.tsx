@@ -9,10 +9,11 @@ import {
   Button,
   Text,
   Icon,
+  Spinner,
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 
-import { StyleSheet, Linking } from "react-native";
+import { StyleSheet, Linking, Image } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -26,6 +27,7 @@ export default function Homepage({ navigation }) {
       const result = await axios(
         "http://myguideapi.herokuapp.com/api/company/"
       );
+
       setPlaces(result.data);
       setIsLoading(false);
     };
@@ -36,53 +38,44 @@ export default function Homepage({ navigation }) {
     setPlaces(newValue);
   }
   const Stack = createStackNavigator();
-  return (
-    <Container>
+  return isLoading ? (
+    <Spinner />
+  ) : (
+    <Container style={styles.blue}>
       {/* <Header /> */}
       <Content>
         <List>
+          <ListItem itemDivider>
+            <Text>B</Text>
+          </ListItem>
           {places.map((item) => {
             return (
-              <ListItem>
-                <Grid>
-                  <Col style={{ height: 20, width: 20 }}>
-                    <Icon
-                      name="home"
-                      style={{
-                        fontSize: 20,
-                        height: "100%",
-                        width: "100%",
-                      }}
-                    ></Icon>
+              <ListItem
+                onPress={() =>
+                  navigation.navigate("CompanyDetails", {
+                    companyId: item.id,
+                  })
+                }
+              >
+                <Grid style={styles.listItem}>
+                  <Col style={styles.ImgaeWrapper}>
+                    <Image
+                      style={styles.Image}
+                      source={require("./placeholder.png")}
+                    />
                   </Col>
-                  <Col style={{ height: 20, width: "60%" }}>
-                    <Text
-                      onPress={() =>
-                        navigation.navigate("CompanyDetails", {
-                          companyId: item.id,
-                        })
-                      }
-                    >
-                      {item.name}
-                    </Text>
+                  <Col style={{ height: 20, width: "50%" }}>
+                    <Text style={styles.TextCenter}>{item.name}</Text>
                   </Col>
-                  <Col style={{ height: 20, width: "10%" }}>
-                    <Icon
-                      name="see"
-                      style={{
-                        fontSize: 20,
-                        height: "100%",
-                        width: "100%",
-                      }}
-                    ></Icon>
-                  </Col>
-                  <Col>
+                  <Col></Col>
+                  <Col style={{ height: "100%", width: "29%" }}>
                     <Button
                       onPress={() =>
                         Linking.openURL("google.navigation:q=100+101")
                       }
+                      style={styles.btnRed}
                     >
-                      <Text>Show in map</Text>
+                      <Text style={styles.BtnText}>Show in map</Text>
                     </Button>
                   </Col>
                 </Grid>
@@ -90,18 +83,7 @@ export default function Homepage({ navigation }) {
             );
           })}
         </List>
-        <Content>
-          <Button
-            onPress={() =>
-              navigation.navigate("Scan", {
-                places: places,
-                handleChange: handleChange,
-              })
-            }
-          >
-            <Text>Scan QR</Text>
-          </Button>
-        </Content>
+        <Content></Content>
       </Content>
     </Container>
   );
@@ -147,5 +129,43 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     height: 44,
+  },
+  btnRed: {
+    backgroundColor: "red",
+    borderRadius: 8,
+    height: 30,
+    width: "100%",
+  },
+  listItem: {
+    flex: 1,
+    marginBottom: 25,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  listItemNotImage: {},
+
+  BtnText: {
+    fontSize: 8,
+    textAlign: "center",
+    width: "100%",
+    height: "100%",
+  },
+  TextCenter: {
+    alignSelf: "flex-start",
+    marginLeft: 30,
+  },
+  Image: {
+    height: "100%",
+    width: "100%",
+  },
+  ImgaeWrapper: {
+    backgroundColor: "grey",
+    height: 70,
+    width: 70,
+    borderRadius: 50,
+  },
+  blue: {
+    backgroundColor: "white",
   },
 });

@@ -1,50 +1,31 @@
-// qrCode ? <View
-//   style={{
-//     flex: 1,
-//     flexDirection: 'column',
-//     justifyContent: 'flex-end',
-//   }}>
-//   <BarCodeScanner
-//     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-//     style={StyleSheet.absoluteFillObject}
-//   />
-
 import { View, StyleSheet, Button, Text } from "react-native";
 import React, { useState } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { nativeTheme } from "electron";
-
+import PoiProfile from "./PoiProfile";
+import axios from "axios";
+import Scanner from "./Scanner";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import ShowPoiFromScan from "./ShowPoiFromScan";
 export default function Scan({ navigation }) {
   const [scanned, setScanned] = useState(false);
   const [qrCode, SetqrCode] = useState(false);
   const [isAllerted, setisAlerted] = useState(false);
-
-  const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-  };
+  const HomeStack = createStackNavigator();
   return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: "column",
-        justifyContent: "flex-end",
-      }}
-    >
-      <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="Scanner"
+        component={Scanner}
+        options={{ tabBarLabel: "Home!" }}
       />
-      {scanned && (
-        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
-      )}
-      <Button
-        title={"Exiter"}
-        onPress={() => {
-          navigation.navigate("Homepage");
-        }}
+      <HomeStack.Screen
+        name="ShowPoiFromScan"
+        component={ShowPoiFromScan}
+        options={{ tabBarLabel: "Home!" }}
       />
-    </View>
+    </HomeStack.Navigator>
   );
 }
 

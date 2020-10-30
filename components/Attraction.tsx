@@ -10,7 +10,7 @@ export default function Attraction({ navigation, route }) {
   return (
     <View style={styles.container}>
       <Text>
-        Hello from the Page
+        Hello from the Attraction Page
         {attraction}
       </Text>
 
