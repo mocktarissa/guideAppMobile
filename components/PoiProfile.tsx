@@ -14,8 +14,9 @@ import {
   Spinner,
   Grid,
   List,
+  DeckSwiper,
 } from "native-base";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Image } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -28,6 +29,9 @@ export default function PoiProfile({ navigation, route }) {
   const [category, setCategory] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [imageSize, setImageSize] = useState(true);
+
+  const [currentImage, setCurrentImage] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(
@@ -47,9 +51,44 @@ export default function PoiProfile({ navigation, route }) {
     <Container>
       <Content>
         <Card>
-          <CardItem
-            style={imageSize ? styles.image : styles.imageSmall}
-          ></CardItem>
+          <CardItem style={imageSize ? styles.image : styles.imageSmall}>
+            {currentImage > 0 ? (
+              <Button
+                onPress={() => setCurrentImage(currentImage - 1)}
+                transparent
+              >
+                <Icon name="ios-arrow-dropleft" />
+              </Button>
+            ) : (
+              <Button
+                onPress={() => setCurrentImage(currentImage - 1)}
+                transparent
+                disabled
+              >
+                <Icon name="ios-arrow-dropleft" />
+              </Button>
+            )}
+            <Image
+              style={{ height: "100%", width: "70%" }}
+              source={{ uri: poi[`picture${currentImage + 1}`] }}
+            />
+            {currentImage + 1 > 5 ? (
+              <Button
+                onPress={() => setCurrentImage(currentImage + 1)}
+                transparent
+                disabled
+              >
+                <Icon name="ios-arrow-dropright" />
+              </Button>
+            ) : (
+              <Button
+                onPress={() => setCurrentImage(currentImage + 1)}
+                transparent
+              >
+                <Icon name="ios-arrow-dropright" />
+              </Button>
+            )}
+          </CardItem>
           <CardItem onPress={() => setImageSize(false)}>
             <CardItem style={styles.logo}></CardItem>
             <Left>
@@ -235,3 +274,15 @@ const styles = StyleSheet.create({
   commentTitle: {},
   comments: { marginTop: 6, marginBottom: 40, overflow: "scroll" },
 });
+
+function Carousel() {
+  return (
+    <FlatList
+      data={slideList}
+      style={{ flex: 1 }}
+      renderItem={({ item }) => {
+        return <Slide data={item} />;
+      }}
+    />
+  );
+}

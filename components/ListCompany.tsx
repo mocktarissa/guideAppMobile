@@ -59,10 +59,19 @@ export default function Homepage({ navigation }) {
               >
                 <Grid style={styles.listItem}>
                   <Col style={styles.ImgaeWrapper}>
-                    <Image
-                      style={styles.Image}
-                      source={require("./placeholder.png")}
-                    />
+                    {item.logo == "placeholder.jpg" ? (
+                      <Image
+                        style={styles.Image}
+                        source={require("./placeholder.png")}
+                      />
+                    ) : (
+                      <Image
+                        style={styles.Image}
+                        source={{
+                          uri: item.logo,
+                        }}
+                      />
+                    )}
                   </Col>
                   <Col style={{ height: 20, width: "50%" }}>
                     <Text style={styles.TextCenter}>{item.name}</Text>

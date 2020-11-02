@@ -91,7 +91,17 @@ export default function CompanyDetails({ navigation, route }) {
               <Card key={item.id} style={{ height: 150 }}>
                 <Grid style={styles.selfContained}>
                   <Col style={{ height: "100%", width: "30%" }}>
-                    <CardItem style={styles.image}></CardItem>
+                    <CardItem style={styles.image}>
+                      <Image
+                        style={{
+                          height: "100%",
+                          width: "100%",
+                          margin: 0,
+                          padding: 0,
+                        }}
+                        source={{ uri: item.picture1 }}
+                      ></Image>
+                    </CardItem>
                   </Col>
                   <Col
                     style={{ maxHeight: "100%", width: "70%" }}
