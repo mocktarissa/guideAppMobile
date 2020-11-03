@@ -38,6 +38,24 @@ export default function Homepage({ navigation }) {
     setPlaces(newValue);
   }
   const Stack = createStackNavigator();
+  const callNumber = (phone) => {
+    console.log("callNumber ----> ", phone);
+    let phoneNumber = phone;
+    if (Platform.OS !== "android") {
+      phoneNumber = `telprompt:${phone}`;
+    } else {
+      phoneNumber = `tel:${phone}`;
+    }
+    Linking.canOpenURL(phoneNumber)
+      .then((supported) => {
+        if (!supported) {
+          Alert.alert("Phone number is not available");
+        } else {
+          return Linking.openURL(phoneNumber);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return isLoading ? (
     <Spinner />
   ) : (
@@ -85,6 +103,17 @@ export default function Homepage({ navigation }) {
                       style={styles.btnRed}
                     >
                       <Text style={styles.BtnText}>Show in map</Text>
+                    </Button>
+                    <Button
+                      style={{
+                        borderRadius: 8,
+                        height: 30,
+                        width: "100%",
+                        textAlign: "center",
+                      }}
+                      onPress={() => callNumber(item.phone_number)}
+                    >
+                      <Text>Call</Text>
                     </Button>
                   </Col>
                 </Grid>

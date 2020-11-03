@@ -19,7 +19,14 @@ import {
 } from "native-base";
 import { Image } from "react-native";
 
-import { View, StyleSheet, FlatList, Linking } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Linking,
+  Alert,
+  Platform,
+} from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -80,6 +87,8 @@ export default function CompanyDetails({ navigation, route }) {
   </Content>
 </Container>; */
   }
+
+
   return isLoading ? (
     <Spinner />
   ) : (
@@ -139,6 +148,7 @@ export default function CompanyDetails({ navigation, route }) {
     </Container>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
