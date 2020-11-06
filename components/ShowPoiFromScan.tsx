@@ -27,17 +27,6 @@ export default function ShowPoiFromScan({ navigation, route }) {
   const [category, setCategory] = useState(data[0].category);
   const [isLoading, setIsLoading] = useState(true);
 
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       const result = await axios(
-  //         `http://myguideapi.herokuapp.com/api/company/${companyId}/pois/${poiId}`
-  //       );
-  //
-  //     };
-
-  //     fetchData();
-  //   }, []);
-
   return (
     <Container>
       <Content>
