@@ -9,13 +9,17 @@ export default function Scanner({ navigation }) {
   const [qrCode, SetqrCode] = useState(false);
   const [isAllerted, setisAlerted] = useState(false);
   const fetchData = async (data) => {
-    const result = await axios(
-      `http://myguideapi.herokuapp.com/api/qrcode/${data}`
-    );
-    // setScanned(result.data);
-    navigation.navigate("ShowPoiFromScan", {
-      data: result.data,
-    });
+    try {
+      const result = await axios(
+        `http://myguideapi.herokuapp.com/api/qrcode/${data}`
+      );
+      setScanned(false);
+      navigation.navigate("ShowPoiFromScan", {
+        data: result.data,
+      });
+    } catch (e) {
+      alert("Not Found");
+    }
   };
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
@@ -36,12 +40,12 @@ export default function Scanner({ navigation }) {
       {scanned && (
         <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
       )}
-      <Button
-        title={"Exiter"}
+      {/* <Button
+        title={"Exit"}
         onPress={() => {
           navigation.navigate("Homepage");
         }}
-      />
+      /> */}
     </View>
   );
 }

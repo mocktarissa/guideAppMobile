@@ -27,6 +27,7 @@ import ListCompany from "./ListCompany";
 import CompanyDetails from "./CompanyDetails";
 import PoiProfile from "./PoiProfile";
 import ShowPoiFromScan from "./ShowPoiFromScan";
+import { FlatList } from "react-native-gesture-handler";
 export default function Search({ navigation }) {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState({ name: "Search" });
@@ -43,7 +44,10 @@ export default function Search({ navigation }) {
   }, []);
   function search() {
     setSearching(true);
-    let isfound = company.find((e) => e.name === query);
+    let isfound = company.find((e) => 
+    e.name === query
+    
+    );
     if (isfound) {
       setResult(isfound);
     } else setResult({ name: "Not Found" });
@@ -54,7 +58,10 @@ export default function Search({ navigation }) {
       <Header searchBar rounded>
         <Item>
           <Icon name="ios-search" />
-          <Input placeholder="Search" onChangeText={(text) => setQuery(text)} />
+          <Input
+            placeholder="Search"
+            onChangeText={(text) => setQuery(text.toUpperCase())}
+          />
           <Icon name="ios-people" />
         </Item>
       </Header>
@@ -63,16 +70,17 @@ export default function Search({ navigation }) {
       <Button onPress={() => search()}>
         <Text>Search</Text>
       </Button>
-      <Text style={{ padding: 10, fontSize: 42 }}>
-        {result.name ? (
-          <Item>
-            <Icon name="add" />
-            <Text>{result.name}</Text>
-          </Item>
-        ) : (
-          ""
-        )}
-      </Text>
+      <Container>
+        <Text style={{ padding: 10, fontSize: 42 }}>
+          {result.name ? (
+            <Item>
+              <Text style={{ textAlign: "center" }}>{result.name}</Text>
+            </Item>
+          ) : (
+            ""
+          )}
+        </Text>
+      </Container>
     </Container>
   );
 }

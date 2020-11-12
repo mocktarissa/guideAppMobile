@@ -11,10 +11,12 @@ import {
   Icon,
   Left,
   Body,
+  Spinner,
+  Grid,
+  List,
   DeckSwiper,
-  Image,
 } from "native-base";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView, Image } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -26,12 +28,52 @@ export default function ShowPoiFromScan({ navigation, route }) {
   const [poi, setPoi] = useState(data[0]);
   const [category, setCategory] = useState(data[0].category);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [imageSize, setImageSize] = useState(true);
+  const [currentImage, setCurrentImage] = useState(0);
   return (
     <Container>
       <Content>
-        <Card style={{ flex: 0 }}>
-          <CardItem>
+        <Card>
+          <CardItem style={imageSize ? styles.image : styles.imageSmall}>
+            {currentImage > 0 ? (
+              <Button
+                onPress={() => setCurrentImage(currentImage - 1)}
+                transparent
+              >
+                <Icon name="ios-arrow-dropleft" />
+              </Button>
+            ) : (
+              <Button
+                onPress={() => setCurrentImage(currentImage - 1)}
+                transparent
+                disabled
+              >
+                <Icon name="ios-arrow-dropleft" />
+              </Button>
+            )}
+            <Image
+              style={{ height: "100%", width: "70%" }}
+              source={{ uri: poi[`picture${currentImage + 1}`] }}
+            />
+            {currentImage + 1 > 5 ? (
+              <Button
+                onPress={() => setCurrentImage(currentImage + 1)}
+                transparent
+                disabled
+              >
+                <Icon name="ios-arrow-dropright" />
+              </Button>
+            ) : (
+              <Button
+                onPress={() => setCurrentImage(currentImage + 1)}
+                transparent
+              >
+                <Icon name="ios-arrow-dropright" />
+              </Button>
+            )}
+          </CardItem>
+          <CardItem onPress={() => setImageSize(false)}>
+            <CardItem style={styles.logo}></CardItem>
             <Left>
               <Body>
                 <Text>{poi.name}</Text>
@@ -40,11 +82,8 @@ export default function ShowPoiFromScan({ navigation, route }) {
             </Left>
           </CardItem>
           <CardItem>
-            <Body>
+            <Body style={styles.description}>
               <Text>{poi.description}</Text>
-              <Text>
-                http://myguideapi.herokuapp.com/storage/${poi.picture1}
-              </Text>
             </Body>
           </CardItem>
           <CardItem>
@@ -55,6 +94,99 @@ export default function ShowPoiFromScan({ navigation, route }) {
               </Button>
             </Left>
           </CardItem>
+          <Text style={{ marginBottom: 5 }}>Comments</Text>
+          <ScrollView style={styles.comments}>
+            {/* Map to all the users comments on this POI */}
+
+            <CardItem>
+              <CardItem style={styles.logo}></CardItem>
+              <Left>
+                <Body>
+                  <Grid>
+                    <Icon name="star" />
+                    <Icon name="star" />
+                    <Icon name="star" />
+                    <Icon name="star" />
+                    <Icon name="star" />
+                  </Grid>
+                  <Text>Very Good</Text>
+                  <Text note>The Place is Clean and spacious</Text>
+                  <Grid>
+                    <Button transparent>
+                      <Text>
+                        <Icon name="thumbs-up" />
+                        Useful
+                      </Text>
+                    </Button>
+                    <Button transparent>
+                      <Text>
+                        <Icon name="thumbs-down" />
+                        Not Useful
+                      </Text>
+                    </Button>
+                  </Grid>
+                </Body>
+              </Left>
+            </CardItem>
+            <CardItem>
+              <CardItem style={styles.logo}></CardItem>
+              <Left>
+                <Body>
+                  <Grid>
+                    <Icon name="star" />
+                    <Icon name="star" />
+                    <Icon name="star" />
+                    <Icon name="star" />
+                    <Icon name="star" />
+                  </Grid>
+                  <Text>Very Good</Text>
+                  <Text note>The Place is Clean and spacious</Text>
+                  <Grid>
+                    <Icon name="thumbs-up" />
+                    <Text>Useful</Text>
+                    <Icon name="thumbs-down" />
+                    <Text>Not Useful</Text>
+                  </Grid>
+                </Body>
+              </Left>
+            </CardItem>
+            <CardItem>
+              <CardItem style={styles.logo}></CardItem>
+              <Left>
+                <Body>
+                  <Grid>
+                    <Icon name="star" />
+                    <Icon name="star" />
+                    <Icon name="star" />
+                  </Grid>
+                  <Text>Could be better</Text>
+                  <Text note>Nice place for kids</Text>
+                </Body>
+              </Left>
+            </CardItem>
+            <CardItem>
+              <CardItem style={styles.logo}></CardItem>
+              <Left>
+                <Body>
+                  <Grid>
+                    <Icon name="star" />
+                    <Icon name="star" />
+                    <Icon name="star" />
+                  </Grid>
+                  <Text>Could be better</Text>
+                  <Text note>Nice place for kids</Text>
+                  <Grid>
+                    <Icon name="thumbs-up" />
+                    <Text>Useful</Text>
+                    <Icon name="thumbs-down" />
+                    <Text>Not Useful</Text>
+                  </Grid>
+                </Body>
+              </Left>
+            </CardItem>
+
+            {/* End of comments */}
+          </ScrollView>
         </Card>
       </Content>
     </Container>
@@ -101,4 +233,27 @@ const styles = StyleSheet.create({
     fontSize: 18,
     height: 44,
   },
+  image: {
+    backgroundColor: "grey",
+    height: "30%",
+    margin: 2,
+    width: "100%",
+  },
+
+  imageSmall: {
+    backgroundColor: "grey",
+    height: "40%",
+    margin: 2,
+    width: "100%",
+  },
+
+  description: {},
+  logo: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    backgroundColor: "grey",
+  },
+  commentTitle: {},
+  comments: { marginTop: 6, marginBottom: 40, overflow: "scroll" },
 });
