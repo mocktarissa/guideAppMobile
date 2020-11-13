@@ -61,7 +61,7 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen
-          name="Homepage"
+          name="Home Page"
           component={Homepage}
           options={{
             tabBarIcon: ({ color, size }) => {

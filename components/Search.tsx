@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component, useState, useEffect, useRef } from "react";
 
 import {
   Container,
@@ -33,6 +33,7 @@ export default function Search({ navigation }) {
   const [result, setResult] = useState([]);
   const [company, setCompany] = useState([]);
   const [searching, setSearching] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(
@@ -50,6 +51,8 @@ export default function Search({ navigation }) {
     } else setResult([{ name: "Not Found" }]);
     setSearching(false);
   }
+
+  function cancel() {}
   return (
     <Container>
       <Header searchBar rounded>
@@ -60,8 +63,8 @@ export default function Search({ navigation }) {
             onChangeText={(text) => setQuery(text)}
             onEndEditing={() => search()}
           />
-          <Button onPress={() => search()} transparent>
-            <Icon name="ios-search" />
+          <Button onPress={() => cancel()} transparent>
+            <Icon name="ios-close" />
           </Button>
         </Item>
       </Header>

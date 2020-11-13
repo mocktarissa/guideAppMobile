@@ -53,7 +53,7 @@ export default function Homepage({ navigation }) {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
-        name="AttractionList"
+        name="Attraction List"
         component={ListCompany}
         options={{ tabBarLabel: "Home!" }}
       />
@@ -69,7 +69,7 @@ export default function Homepage({ navigation }) {
         options={{ tabBarLabel: "Home!" }}
       />
       <HomeStack.Screen
-        name="ShowPoiFromScan"
+        name="Scanned Item"
         component={ShowPoiFromScan}
         options={{ tabBarLabel: "Home!" }}
       />
