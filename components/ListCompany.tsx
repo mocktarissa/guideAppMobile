@@ -13,7 +13,7 @@ import {
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 
-import { StyleSheet, Linking, Image } from "react-native";
+import { StyleSheet, Linking, Image, Platform } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -97,9 +97,15 @@ export default function Homepage({ navigation }) {
                   <Col></Col>
                   <Col style={{ height: "100%", width: "29%" }}>
                     <Button
-                      onPress={() =>
-                        Linking.openURL("google.navigation:q=100+101")
-                      }
+                      onPress={() => {
+                        // choosing the appropriate platform and sending it the appropriate location
+                        const url = Platform.select({
+                          ios: `maps:0,0?q=${item.address_line1}${item.address_line2}`,
+                          android: `geo:0,0?q=${item.address_line1}${item.address_line2}`,
+                        });
+
+                        Linking.openURL(url);
+                      }}
                       style={styles.btnRed}
                     >
                       <Text style={styles.BtnText}>Show in map</Text>
