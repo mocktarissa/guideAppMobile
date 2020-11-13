@@ -41,6 +41,7 @@ export default function Homepage({ navigation }) {
   function handleChange(newValue) {
     setCompanies(newValue);
   }
+
   // async function fetchItem() {
   //   let res = JSON.parse(
   //     (await Axios.get("http://192.168.1.13:8000/api/company/")).data
@@ -57,12 +58,13 @@ export default function Homepage({ navigation }) {
         options={{ tabBarLabel: "Home!" }}
       />
       <HomeStack.Screen
-        name="CompanyDetails"
+        name="Company Details"
         component={CompanyDetails}
         options={{ tabBarLabel: "Home!" }}
       />
+
       <HomeStack.Screen
-        name="PoiProfile"
+        name="Poi Profile"
         component={PoiProfile}
         options={{ tabBarLabel: "Home!" }}
       />

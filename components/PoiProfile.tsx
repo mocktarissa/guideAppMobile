@@ -90,7 +90,8 @@ export default function PoiProfile({ navigation, route }) {
             )}
           </CardItem>
           <CardItem onPress={() => setImageSize(false)}>
-            <CardItem style={styles.logo}></CardItem>
+            <Image style={styles.logo} source={{ uri: poi[`picture1`] }} />
+
             <Left>
               <Body>
                 <Text>{poi.name}</Text>

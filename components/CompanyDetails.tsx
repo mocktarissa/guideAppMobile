@@ -88,7 +88,6 @@ export default function CompanyDetails({ navigation, route }) {
 </Container>; */
   }
 
-
   return isLoading ? (
     <Spinner />
   ) : (
@@ -100,22 +99,16 @@ export default function CompanyDetails({ navigation, route }) {
               <Card key={item.id} style={{ height: 150 }}>
                 <Grid style={styles.selfContained}>
                   <Col style={{ height: "100%", width: "30%" }}>
-                    <CardItem style={styles.image}>
-                      <Image
-                        style={{
-                          height: "100%",
-                          width: "100%",
-                          margin: 0,
-                          padding: 0,
-                        }}
-                        source={{ uri: item.picture1 }}
-                      ></Image>
-                    </CardItem>
+                    <Image
+                      style={styles.image}
+                      source={{ uri: item.picture1 }}
+                    ></Image>
+                    <CardItem style={styles.image}></CardItem>
                   </Col>
                   <Col
                     style={{ maxHeight: "100%", width: "70%" }}
                     onPress={() =>
-                      navigation.navigate("PoiProfile", {
+                      navigation.navigate("Poi Profile", {
                         poiId: item.id,
                         companyId: companyId,
                       })
@@ -127,7 +120,7 @@ export default function CompanyDetails({ navigation, route }) {
                     <CardItem>
                       <Text note> {item.location} </Text>
                     </CardItem>
-                    <CardItem cardBody style={styles.mapBtnContainer}>
+                    {/* <CardItem cardBody style={styles.mapBtnContainer}>
                       <Button
                         transparent
                         style={styles.mapBtn}
@@ -137,7 +130,7 @@ export default function CompanyDetails({ navigation, route }) {
                       >
                         <Text>Show in Map</Text>
                       </Button>
-                    </CardItem>
+                    </CardItem> */}
                   </Col>
                 </Grid>
               </Card>

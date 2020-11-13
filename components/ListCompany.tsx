@@ -63,14 +63,17 @@ export default function Homepage({ navigation }) {
       {/* <Header /> */}
       <Content>
         <List>
-          <ListItem itemDivider>
+          {/*
+          This is for categories 
+           <ListItem itemDivider>
             <Text>B</Text>
           </ListItem>
+           */}
           {places.map((item) => {
             return (
               <ListItem
                 onPress={() =>
-                  navigation.navigate("CompanyDetails", {
+                  navigation.navigate("Company Details", {
                     companyId: item.id,
                   })
                 }
@@ -95,33 +98,6 @@ export default function Homepage({ navigation }) {
                     <Text style={styles.TextCenter}>{item.name}</Text>
                   </Col>
                   <Col></Col>
-                  <Col style={{ height: "100%", width: "29%" }}>
-                    <Button
-                      onPress={() => {
-                        // choosing the appropriate platform and sending it the appropriate location
-                        const url = Platform.select({
-                          ios: `maps:0,0?q=${item.address_line1}${item.address_line2}`,
-                          android: `geo:0,0?q=${item.address_line1}${item.address_line2}`,
-                        });
-
-                        Linking.openURL(url);
-                      }}
-                      style={styles.btnRed}
-                    >
-                      <Text style={styles.BtnText}>Show in map</Text>
-                    </Button>
-                    <Button
-                      style={{
-                        borderRadius: 8,
-                        height: 30,
-                        width: "100%",
-                        textAlign: "center",
-                      }}
-                      onPress={() => callNumber(item.phone_number)}
-                    >
-                      <Text>Call</Text>
-                    </Button>
-                  </Col>
                 </Grid>
               </ListItem>
             );
@@ -132,6 +108,34 @@ export default function Homepage({ navigation }) {
     </Container>
   );
 }
+
+// <Col style={{ height: "100%", width: "29%" }}>
+//   <Button
+//     onPress={() => {
+//       // choosing the appropriate platform and sending it the appropriate location
+//       const url = Platform.select({
+//         ios: `maps:0,0?q=${item.address_line1}${item.address_line2}`,
+//         android: `geo:0,0?q=${item.address_line1}${item.address_line2}`,
+//       });
+
+//       Linking.openURL(url);
+//     }}
+//     style={styles.btnRed}
+//   >
+//     <Text style={styles.BtnText}>Show in map</Text>
+//   </Button>
+//   <Button
+//     style={{
+//       borderRadius: 8,
+//       height: 30,
+//       width: "100%",
+//       textAlign: "center",
+//     }}
+//     onPress={() => callNumber(item.phone_number)}
+//   >
+//     <Text>Call</Text>
+//   </Button>
+// </Col>;
 
 const styles = StyleSheet.create({
   container: {

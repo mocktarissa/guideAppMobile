@@ -98,27 +98,6 @@ export default function Search({ navigation }) {
                     <Text style={styles.TextCenter}>{item.name}</Text>
                   </Col>
                   <Col></Col>
-                  <Col style={{ height: "100%", width: "29%" }}>
-                    <Button
-                      onPress={() =>
-                        Linking.openURL("google.navigation:q=100+101")
-                      }
-                      style={styles.btnRed}
-                    >
-                      <Text style={styles.BtnText}>Show in map</Text>
-                    </Button>
-                    <Button
-                      style={{
-                        borderRadius: 8,
-                        height: 30,
-                        width: "100%",
-                        textAlign: "center",
-                      }}
-                      onPress={() => callNumber(item.phone_number)}
-                    >
-                      <Text>Call</Text>
-                    </Button>
-                  </Col>
                 </Grid>
               </ListItem>
             );
@@ -127,6 +106,28 @@ export default function Search({ navigation }) {
       </Container>
     </Container>
   );
+}
+
+{
+  /* <Col style={{ height: "100%", width: "29%" }}>
+  <Button
+    onPress={() => Linking.openURL("google.navigation:q=100+101")}
+    style={styles.btnRed}
+  >
+    <Text style={styles.BtnText}>Show in map</Text>
+  </Button>
+  <Button
+    style={{
+      borderRadius: 8,
+      height: 30,
+      width: "100%",
+      textAlign: "center",
+    }}
+    onPress={() => callNumber(item.phone_number)}
+  >
+    <Text>Call</Text>
+  </Button>
+</Col>; */
 }
 
 // <View style={styles.container}>

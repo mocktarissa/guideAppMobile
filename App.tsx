@@ -23,6 +23,7 @@ import PoiProfile from "./components/PoiProfile";
 import BottomNav from "./components/FooterTab";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Icon } from "native-base";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 export default function App() {
@@ -59,9 +60,33 @@ export default function App() {
 
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Homepage" component={Homepage} />
-        <Tab.Screen name="Search" component={Search} />
-        <Tab.Screen name="Scan" component={Scan} />
+        <Tab.Screen
+          name="Homepage"
+          component={Homepage}
+          options={{
+            tabBarIcon: ({ color, size }) => {
+              return <Icon name="home"></Icon>;
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Search"
+          component={Search}
+          options={{
+            tabBarIcon: ({ color, size }) => {
+              return <Icon name="ios-search"></Icon>;
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Scan"
+          component={Scan}
+          options={{
+            tabBarIcon: ({ color, size }) => {
+              return <Icon name="camera"></Icon>;
+            },
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
