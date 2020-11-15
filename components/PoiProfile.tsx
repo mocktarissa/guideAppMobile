@@ -16,7 +16,13 @@ import {
   List,
   DeckSwiper,
 } from "native-base";
-import { View, StyleSheet, ScrollView, Image } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  ImageBackground,
+} from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -50,60 +56,31 @@ export default function PoiProfile({ navigation, route }) {
   ) : (
     <Container>
       <Content>
-        <Card>
-          <CardItem style={imageSize ? styles.image : styles.imageSmall}>
-            {currentImage > 0 ? (
-              <Button
-                onPress={() => setCurrentImage(currentImage - 1)}
-                transparent
-              >
-                <Icon name="ios-arrow-dropleft" />
-              </Button>
-            ) : (
-              <Button
-                onPress={() => setCurrentImage(currentImage - 1)}
-                transparent
-                disabled
-              >
-                <Icon name="ios-arrow-dropleft" />
-              </Button>
-            )}
-            <Image
-              style={{ height: "100%", width: "70%" }}
-              source={{ uri: poi[`picture${currentImage + 1}`] }}
-            />
-            {currentImage + 1 > 5 ? (
-              <Button
-                onPress={() => setCurrentImage(currentImage + 1)}
-                transparent
-                disabled
-              >
-                <Icon name="ios-arrow-dropright" />
-              </Button>
-            ) : (
-              <Button
-                onPress={() => setCurrentImage(currentImage + 1)}
-                transparent
-              >
-                <Icon name="ios-arrow-dropright" />
-              </Button>
-            )}
-          </CardItem>
-          <CardItem onPress={() => setImageSize(false)}>
-            <Image style={styles.logo} source={{ uri: poi[`picture1`] }} />
+        <Container style={styles.imageMainContainer}>
+          <ImageBackground
+            source={{ uri: poi[`picture${currentImage + 1}`] }}
+            style={styles.imageMain}
+          >
+            <Content style={styles.imageMainTop}></Content>
+            <Text style={styles.title}>{poi.name}</Text>
+            <Text note style={styles.category}>
+              {category["name"].toUpperCase()}
+            </Text>
+          </ImageBackground>
+        </Container>
+        <Container
+          style={{
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            marginHorizontal: 20,
+            backgroundColor: "#e8eded",
+          }}
+        >
+          <Container style={styles.description}>
+            <Text style={{ fontSize: 25 }}>Description:</Text>
+            <Text>{poi.description}</Text>
+          </Container>
 
-            <Left>
-              <Body>
-                <Text>{poi.name}</Text>
-                <Text note>{category["name"]}</Text>
-              </Body>
-            </Left>
-          </CardItem>
-          <CardItem>
-            <Body style={styles.description}>
-              <Text>{poi.description}</Text>
-            </Body>
-          </CardItem>
           <CardItem>
             <Left>
               <Button transparent textStyle={{ color: "#87838B" }}>
@@ -112,100 +89,50 @@ export default function PoiProfile({ navigation, route }) {
               </Button>
             </Left>
           </CardItem>
-          <Text style={{ marginBottom: 5 }}>Comments</Text>
-          <ScrollView style={styles.comments}>
-            {/* Map to all the users comments on this POI */}
+          <Container style={styles.imageComponent}>
+            {/* Images */}
+            {currentImage > 0 ? (
+              <Button
+                onPress={() => setCurrentImage(currentImage - 1)}
+                transparent
+                style={styles.imageLeft}
+              >
+                <Icon name="ios-arrow-dropleft" />
+              </Button>
+            ) : (
+              <Button
+                onPress={() => setCurrentImage(currentImage - 1)}
+                transparent
+                disabled
+                style={styles.imageLeft}
+              >
+                <Icon name="ios-arrow-dropleft" />
+              </Button>
+            )}
 
-            <CardItem>
-              <CardItem style={styles.logo}></CardItem>
-              <Left>
-                <Body>
-                  <Grid>
-                    <Icon name="star" />
-                    <Icon name="star" />
-                    <Icon name="star" />
-                    <Icon name="star" />
-                    <Icon name="star" />
-                  </Grid>
-                  <Text>Very Good</Text>
-                  <Text note>The Place is Clean and spacious</Text>
-                  <Grid>
-                    <Button transparent>
-                      <Text>
-                        <Icon name="thumbs-up" />
-                        Useful
-                      </Text>
-                    </Button>
-                    <Button transparent>
-                      <Text>
-                        <Icon name="thumbs-down" />
-                        Not Useful
-                      </Text>
-                    </Button>
-                  </Grid>
-                </Body>
-              </Left>
-            </CardItem>
-            <CardItem>
-              <CardItem style={styles.logo}></CardItem>
-              <Left>
-                <Body>
-                  <Grid>
-                    <Icon name="star" />
-                    <Icon name="star" />
-                    <Icon name="star" />
-                    <Icon name="star" />
-                    <Icon name="star" />
-                  </Grid>
-                  <Text>Very Good</Text>
-                  <Text note>The Place is Clean and spacious</Text>
-                  <Grid>
-                    <Icon name="thumbs-up" />
-                    <Text>Useful</Text>
-                    <Icon name="thumbs-down" />
-                    <Text>Not Useful</Text>
-                  </Grid>
-                </Body>
-              </Left>
-            </CardItem>
-            <CardItem>
-              <CardItem style={styles.logo}></CardItem>
-              <Left>
-                <Body>
-                  <Grid>
-                    <Icon name="star" />
-                    <Icon name="star" />
-                    <Icon name="star" />
-                  </Grid>
-                  <Text>Could be better</Text>
-                  <Text note>Nice place for kids</Text>
-                </Body>
-              </Left>
-            </CardItem>
-            <CardItem>
-              <CardItem style={styles.logo}></CardItem>
-              <Left>
-                <Body>
-                  <Grid>
-                    <Icon name="star" />
-                    <Icon name="star" />
-                    <Icon name="star" />
-                  </Grid>
-                  <Text>Could be better</Text>
-                  <Text note>Nice place for kids</Text>
-                  <Grid>
-                    <Icon name="thumbs-up" />
-                    <Text>Useful</Text>
-                    <Icon name="thumbs-down" />
-                    <Text>Not Useful</Text>
-                  </Grid>
-                </Body>
-              </Left>
-            </CardItem>
-
-            {/* End of comments */}
-          </ScrollView>
-        </Card>
+            {currentImage + 1 > 5 ? (
+              <Button
+                onPress={() => setCurrentImage(currentImage + 1)}
+                transparent
+                disabled
+                style={styles.imageRight}
+              >
+                <Icon name="ios-arrow-dropright" />
+              </Button>
+            ) : (
+              <Button
+                onPress={() => setCurrentImage(currentImage + 1)}
+                transparent
+                style={styles.imageRight}
+              >
+                <Icon name="ios-arrow-dropright" />
+              </Button>
+            )}
+          </Container>
+          <Text style={{ marginBottom: 5, marginHorizontal: 20 }}>
+            Comments
+          </Text>
+        </Container>
       </Content>
     </Container>
   );
@@ -220,10 +147,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: 20,
   },
-  title: {
-    textAlign: "center",
-    marginVertical: 8,
-  },
+
   fixToText: {
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -274,6 +198,44 @@ const styles = StyleSheet.create({
   },
   commentTitle: {},
   comments: { marginTop: 6, marginBottom: 40, overflow: "scroll" },
+
+  imageRight: {
+    fontSize: 20,
+  },
+
+  imageMainContainer: {
+    height: 320,
+    position: "relative",
+  },
+
+  imageMain: {
+    height: 300,
+
+    overflow: "hidden",
+    marginLeft: "2%",
+    marginRight: "2%",
+    marginVertical: "5%",
+    borderRadius: 20,
+    backgroundColor: "rgba(255,0,0,0.1)",
+  },
+  imageMainTop: {
+    height: 50,
+  },
+  title: {
+    textAlign: "left",
+    marginHorizontal: 20,
+    fontSize: 40,
+    color: "white",
+  },
+  category: {
+    color: "black",
+    textAlign: "left",
+    marginHorizontal: 20,
+    fontSize: 15,
+  },
+  imageComponent: {
+    height: 400,
+  },
 });
 
 function Carousel() {

@@ -26,6 +26,7 @@ import {
   Linking,
   Alert,
   Platform,
+  TouchableHighlight,
 } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -91,50 +92,60 @@ export default function CompanyDetails({ navigation, route }) {
   return isLoading ? (
     <Spinner />
   ) : (
-    <Container>
-      <Content>
+    <Container style={{}}>
+      <Content
+        style={{
+          width: "100%",
+        }}
+      >
         {pois.map((item) => {
           return (
-            <Content>
-              <Card key={item.id} style={{ height: 150 }}>
-                <Grid style={styles.selfContained}>
-                  <Col style={{ height: "100%", width: "30%" }}>
-                    <Image
-                      style={styles.image}
-                      source={{ uri: item.picture1 }}
-                    ></Image>
-                    <CardItem style={styles.image}></CardItem>
-                  </Col>
-                  <Col
-                    style={{ maxHeight: "100%", width: "70%" }}
+            <TouchableHighlight
+              onPress={() =>
+                navigation.navigate("Poi Profile", {
+                  poiId: item.id,
+                  companyId: companyId,
+                })
+              }
+            >
+              <Container style={styles.card}>
+                <Content>
+                  <Image
+                    style={styles.image}
+                    source={{ uri: item.picture1 }}
                     onPress={() =>
                       navigation.navigate("Poi Profile", {
                         poiId: item.id,
                         companyId: companyId,
                       })
                     }
-                  >
-                    <CardItem>
-                      <Text style={styles.item}>{item.name}</Text>
-                    </CardItem>
-                    <CardItem>
-                      <Text note> {item.location} </Text>
-                    </CardItem>
-                    {/* <CardItem cardBody style={styles.mapBtnContainer}>
+                  ></Image>
+                  <Content style={styles.cardBody}>
+                    <Text style={styles.title}>{item.name.toUpperCase()}</Text>
+                    <Text note style={styles.location}>
+                      {" "}
+                      {item.location}{" "}
+                    </Text>
+                    <Text style={styles.description}>
+                      {item.description.slice(0, 125)} ...{" "}
+                    </Text>
+                    {/* <Container style={styles.buttonWrapper}>
                       <Button
-                        transparent
-                        style={styles.mapBtn}
+                        style={styles.buttonReadMore}
                         onPress={() =>
-                          Linking.openURL("google.navigation:q=100+101")
+                          navigation.navigate("Poi Profile", {
+                            poiId: item.id,
+                            companyId: companyId,
+                          })
                         }
                       >
-                        <Text>Show in Map</Text>
+                        <Text>Read more</Text>
                       </Button>
-                    </CardItem> */}
-                  </Col>
-                </Grid>
-              </Card>
-            </Content>
+                    </Container> */}
+                  </Content>
+                </Content>
+              </Container>
+            </TouchableHighlight>
           );
         })}
       </Content>
@@ -148,57 +159,56 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  listRow: {
-    position: "absolute",
-    height: 50,
-  },
+
   title: {
-    textAlign: "center",
-    marginVertical: 8,
+    fontSize: 25,
+    lineHeight: 30,
+    paddingBottom: 5,
   },
-  fixToText: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-  separator: {
-    marginVertical: 8,
-    borderBottomColor: "#737373",
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  button: {
-    position: "absolute",
-    bottom: 0,
-    flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 36,
-    width: 20,
-  },
-  bottom: {
-    flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 36,
-  },
-  item: {
-    fontSize: 20,
-    // height: 20,
+
+  description: {
+    fontSize: 15,
+    color: "#727272",
   },
   image: {
     backgroundColor: "grey",
     width: "100%",
-    height: "100%",
+    height: 150,
   },
-  mapBtnContainer: {
-    width: "2000%",
-    // marginLeft: "10%",
+  card: {
+    overflow: "hidden",
+    borderRadius: 20,
+    height: 350,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 4,
+    width: "90%",
+    marginLeft: "5%",
+    marginBottom: "2%",
+    marginTop: "2%",
   },
-  mapBtn: {
-    width: "100%",
-    height: "100%",
+  cardBody: {
+    marginHorizontal: 20,
+    marginVertical: 15,
   },
-  selfContained: {
+  buttonWrapper: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
+
     alignItems: "center",
+  },
+
+  buttonReadMore: {
+    marginTop: 10,
+    borderRadius: 50,
+    backgroundColor: "#4a89dc",
+    fontWeight: "900",
+    width: 200,
+    textAlign: "center",
   },
 });

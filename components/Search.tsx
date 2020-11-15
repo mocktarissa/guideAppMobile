@@ -43,6 +43,7 @@ export default function Search({ navigation }) {
     };
     fetchData();
   }, []);
+
   function search() {
     setSearching(true);
     let isfound = company.find((e) => e.name === query);
@@ -52,7 +53,10 @@ export default function Search({ navigation }) {
     setSearching(false);
   }
 
-  function cancel() {}
+  function cancel() {
+
+  }
+
   return (
     <Container>
       <Header searchBar rounded>
@@ -69,14 +73,13 @@ export default function Search({ navigation }) {
         </Item>
       </Header>
       {searching ? <Spinner /> : <></>}
-
       <Container>
         <List>
           {result.map((item) => {
             return (
               <ListItem
                 onPress={() =>
-                  navigation.navigate("CompanyDetails", {
+                  navigation.navigate("Company Details", {
                     companyId: item.id,
                   })
                 }
