@@ -23,7 +23,7 @@ import {
   Image,
   ImageBackground,
 } from "react-native";
-
+import Swipeable from "react-native-gesture-handler/Swipeable";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import axios from "axios";
@@ -61,25 +61,74 @@ export default function PoiProfile({ navigation, route }) {
             source={{ uri: poi[`picture${currentImage + 1}`] }}
             style={styles.imageMain}
           >
-            <Content style={styles.imageMainTop}></Content>
-            <Text style={styles.title}>{poi.name}</Text>
-            <Text note style={styles.category}>
-              {category["name"].toUpperCase()}
-            </Text>
+            <Container style={{ backgroundColor: "rgba(0, 20, 20,0.6)" }}>
+              <Content style={styles.imageMainTop}></Content>
+              <Text style={styles.title}>{poi.name}</Text>
+              <Text note style={styles.category}>
+                {category["name"].toUpperCase()}
+              </Text>
+              <Container style={styles.imagescontrol}>
+                {currentImage > 0 ? (
+                  <Button
+                    onPress={() => setCurrentImage(currentImage - 1)}
+                    transparent
+                    style={styles.imageLeft}
+                  >
+                    <Icon
+                      style={styles.ImageControlIcon}
+                      name="ios-arrow-dropleft"
+                    />
+                  </Button>
+                ) : (
+                  <Button
+                    onPress={() => setCurrentImage(currentImage - 1)}
+                    transparent
+                    disabled
+                    style={styles.imageLeft}
+                  >
+                    <Icon
+                      style={styles.ImageControlIcon}
+                      name="ios-arrow-dropleft"
+                    />
+                  </Button>
+                )}
+
+                {currentImage + 1 > 5 ? (
+                  <Button
+                    onPress={() => setCurrentImage(currentImage + 1)}
+                    transparent
+                    disabled
+                    style={styles.imageRight}
+                  >
+                    <Icon
+                      style={styles.ImageControlIcon}
+                      name="ios-arrow-dropright"
+                    />
+                  </Button>
+                ) : (
+                  <Button
+                    onPress={() => setCurrentImage(currentImage + 1)}
+                    transparent
+                    style={styles.imageRight}
+                  >
+                    <Icon
+                      style={styles.ImageControlIcon}
+                      name="ios-arrow-dropright"
+                    />
+                  </Button>
+                )}
+              </Container>
+            </Container>
           </ImageBackground>
+          <Container style={styles.imageComponent}>{/* Images */}</Container>
         </Container>
-        <Container
-          style={{
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            marginHorizontal: 20,
-            backgroundColor: "#e8eded",
-          }}
-        >
-          <Container style={styles.description}>
-            <Text style={{ fontSize: 25 }}>Description:</Text>
-            <Text>{poi.description}</Text>
-          </Container>
+        <Container style={styles.descriptionContainer}>
+          <Text style={{ fontSize: 25 }}>Description:</Text>
+          <ScrollView style={styles.description}>
+            <Container>
+              <Text>{poi.description}</Text>
+            </Container>
+          </ScrollView>
 
           <CardItem>
             <Left>
@@ -89,46 +138,7 @@ export default function PoiProfile({ navigation, route }) {
               </Button>
             </Left>
           </CardItem>
-          <Container style={styles.imageComponent}>
-            {/* Images */}
-            {currentImage > 0 ? (
-              <Button
-                onPress={() => setCurrentImage(currentImage - 1)}
-                transparent
-                style={styles.imageLeft}
-              >
-                <Icon name="ios-arrow-dropleft" />
-              </Button>
-            ) : (
-              <Button
-                onPress={() => setCurrentImage(currentImage - 1)}
-                transparent
-                disabled
-                style={styles.imageLeft}
-              >
-                <Icon name="ios-arrow-dropleft" />
-              </Button>
-            )}
 
-            {currentImage + 1 > 5 ? (
-              <Button
-                onPress={() => setCurrentImage(currentImage + 1)}
-                transparent
-                disabled
-                style={styles.imageRight}
-              >
-                <Icon name="ios-arrow-dropright" />
-              </Button>
-            ) : (
-              <Button
-                onPress={() => setCurrentImage(currentImage + 1)}
-                transparent
-                style={styles.imageRight}
-              >
-                <Icon name="ios-arrow-dropright" />
-              </Button>
-            )}
-          </Container>
           <Text style={{ marginBottom: 5, marginHorizontal: 20 }}>
             Comments
           </Text>
@@ -199,24 +209,19 @@ const styles = StyleSheet.create({
   commentTitle: {},
   comments: { marginTop: 6, marginBottom: 40, overflow: "scroll" },
 
-  imageRight: {
-    fontSize: 20,
-  },
-
   imageMainContainer: {
-    height: 320,
+    height: 340,
     position: "relative",
   },
 
   imageMain: {
     height: 300,
-
     overflow: "hidden",
     marginLeft: "2%",
     marginRight: "2%",
     marginVertical: "5%",
     borderRadius: 20,
-    backgroundColor: "rgba(255,0,0,0.1)",
+    backgroundColor: "rgba(255,0,0,0)",
   },
   imageMainTop: {
     height: 50,
@@ -228,13 +233,34 @@ const styles = StyleSheet.create({
     color: "white",
   },
   category: {
-    color: "black",
+    color: "#979e7b",
     textAlign: "left",
     marginHorizontal: 20,
     fontSize: 15,
   },
   imageComponent: {
     height: 400,
+  },
+  descriptionContainer: {
+    marginHorizontal: 20,
+  },
+  imagescontrol: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+    height: 200,
+    marginBottom: 20,
+    alignItems: "center",
+  },
+  ImageControlIcon: {
+    height: "100%",
+    width: 20,
+  },
+  imageRight: {
+    fontSize: 20,
+    marginLeft: "80%",
   },
 });
 

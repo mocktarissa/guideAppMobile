@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   image: {
     backgroundColor: "grey",
     width: "100%",
-    height: 150,
+    height: 170,
   },
   card: {
     overflow: "hidden",
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
 
-    elevation: 4,
+    elevation: 10,
     width: "90%",
     marginLeft: "5%",
     marginBottom: "2%",
