@@ -31,6 +31,8 @@ import {
   StyleService,
   Text,
   useStyleSheet,
+  Popover,
+  Layout,
 } from "@ui-kitten/components";
 
 export default function PoiProfile({ navigation, route }) {
@@ -41,9 +43,13 @@ export default function PoiProfile({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true);
   const [imageSize, setImageSize] = useState(true);
 
-  const [currentImage, setCurrentImage] = useState(0);
+  const [currentImage, setCurrentImage] = useState("");
+  const [visible, setVisible] = React.useState(false);
   const styles = useStyleSheet(themedStyles);
-
+  const showPicture = (picture) => {
+    setCurrentImage(picture);
+    setVisible(true);
+  };
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(
@@ -57,6 +63,7 @@ export default function PoiProfile({ navigation, route }) {
     fetchData();
   }, []);
   // i
+
   return isLoading ? (
     <Spinner></Spinner>
   ) : (
@@ -93,7 +100,7 @@ export default function PoiProfile({ navigation, route }) {
       <Text style={styles.description} appearance="hint">
         {poi.description}
       </Text>
-      <Text style={styles.sectionLabel} category="s1">
+      <Text style={styles.sectionLabel} category="h4">
         Photos
       </Text>
       <List
@@ -109,12 +116,132 @@ export default function PoiProfile({ navigation, route }) {
           poi.picture6,
         ]}
         renderItem={({ item, index }) => (
-          <Image style={styles.imageItem} source={{ uri: item }} />
+          <Popover
+            backdropStyle={styles.backdrop}
+            visible={visible}
+            anchor={() => (
+              <ImageBackground style={styles.imageItem} source={{ uri: item }}>
+                <Button
+                  key={index}
+                  onPress={() => showPicture(item)}
+                  style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+                >
+                  Show
+                </Button>
+              </ImageBackground>
+            )}
+            onBackdropPress={() => setVisible(false)}
+          >
+            <Layout style={styles.content}>
+              <Icon style={styles.contentIcon} name="close"></Icon>
+              <ImageBackground
+                style={styles.imageFull}
+                source={{ uri: currentImage }}
+              />
+            </Layout>
+          </Popover>
         )}
       />
     </ScrollView>
   );
 }
+
+const themedStyles = StyleService.create({
+  container: {
+    backgroundColor: "background-basic-color-2",
+  },
+  image: {
+    height: 360,
+  },
+  bookingCard: {
+    marginTop: -80,
+    margin: 16,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 10,
+  },
+  title: {
+    width: "65%",
+  },
+  rentLabel: {
+    marginTop: 24,
+  },
+  priceLabel: {
+    marginTop: 8,
+  },
+  bookButton: {
+    position: "absolute",
+    bottom: 24,
+    right: 24,
+  },
+  detailsList: {
+    flexDirection: "row",
+    marginHorizontal: -4,
+    marginVertical: 8,
+  },
+  detailItem: {
+    marginHorizontal: 4,
+    borderRadius: 16,
+  },
+  optionList: {
+    flexDirection: "row",
+    marginHorizontal: -4,
+    marginVertical: 8,
+  },
+  optionItem: {
+    marginHorizontal: 4,
+    paddingHorizontal: 0,
+  },
+  description: {
+    marginHorizontal: 16,
+    marginVertical: 8,
+  },
+  sectionLabel: {
+    marginHorizontal: 16,
+    marginVertical: 8,
+  },
+  imagesList: {
+    padding: 8,
+    backgroundColor: "background-basic-color-2",
+  },
+  imageItem: {
+    flex: 1,
+    width: 280,
+    height: 220,
+    borderRadius: 8,
+    marginHorizontal: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  content: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    // paddingHorizontal: 1,
+    // paddingVertical: 8,
+    width: "100%",
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  imageFull: {
+    width: 300,
+    height: 500,
+    borderRadius: 8,
+    marginHorizontal: 8,
+  },
+  contentIcon: {
+    color: "white",
+  },
+});
+
 // isLoading ? (
 // );
 //   <Spinner />
@@ -327,66 +454,3 @@ export default function PoiProfile({ navigation, route }) {
 //     marginLeft: "80%",
 //   },
 // });
-
-const themedStyles = StyleService.create({
-  container: {
-    backgroundColor: "background-basic-color-2",
-  },
-  image: {
-    height: 360,
-  },
-  bookingCard: {
-    marginTop: -80,
-    margin: 16,
-  },
-  title: {
-    width: "65%",
-  },
-  rentLabel: {
-    marginTop: 24,
-  },
-  priceLabel: {
-    marginTop: 8,
-  },
-  bookButton: {
-    position: "absolute",
-    bottom: 24,
-    right: 24,
-  },
-  detailsList: {
-    flexDirection: "row",
-    marginHorizontal: -4,
-    marginVertical: 8,
-  },
-  detailItem: {
-    marginHorizontal: 4,
-    borderRadius: 16,
-  },
-  optionList: {
-    flexDirection: "row",
-    marginHorizontal: -4,
-    marginVertical: 8,
-  },
-  optionItem: {
-    marginHorizontal: 4,
-    paddingHorizontal: 0,
-  },
-  description: {
-    marginHorizontal: 16,
-    marginVertical: 8,
-  },
-  sectionLabel: {
-    marginHorizontal: 16,
-    marginVertical: 8,
-  },
-  imagesList: {
-    padding: 8,
-    backgroundColor: "background-basic-color-2",
-  },
-  imageItem: {
-    width: 180,
-    height: 120,
-    borderRadius: 8,
-    marginHorizontal: 8,
-  },
-});
