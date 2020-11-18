@@ -81,10 +81,7 @@ export default function Homepage({ navigation }) {
                 <Grid style={styles.listItem}>
                   <Col style={styles.ImgaeWrapper}>
                     {item.logo == "placeholder.jpg" ? (
-                      <Image
-                        style={styles.Image}
-                        source={require("./placeholder.png")}
-                      />
+                      <></>
                     ) : (
                       <Image
                         style={styles.Image}

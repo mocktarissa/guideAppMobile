@@ -92,10 +92,7 @@ export default function Search({ navigation }) {
                   <Grid style={styles.listItem}>
                     <Col style={styles.ImgaeWrapper}>
                       {item.logo == "placeholder.jpg" ? (
-                        <Image
-                          style={styles.Image}
-                          source={require("./placeholder.png")}
-                        />
+                        <></>
                       ) : (
                         <Image
                           style={styles.Image}
@@ -126,10 +123,7 @@ export default function Search({ navigation }) {
                   <Grid style={styles.listItem}>
                     <Col style={styles.ImgaeWrapper}>
                       {item.picture1 == "placeholder.jpg" ? (
-                        <Image
-                          style={styles.Image}
-                          source={require("./placeholder.png")}
-                        />
+                        <></>
                       ) : (
                         <Image
                           style={styles.Image}

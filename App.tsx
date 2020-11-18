@@ -18,9 +18,18 @@ import Search from "./components/Search/Search";
 import Scan from "./components/Scan/Scan";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Icon } from "native-base";
+// import { Icon } from "native-base";
 import * as eva from "@eva-design/eva";
-import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
+import { EvaIconsPack } from "@ui-kitten/eva-icons";
+import {
+  ApplicationProvider,
+  Layout,
+  Text,
+  BottomNavigation,
+  BottomNavigationTab,
+  Icon,
+  IconRegistry,
+} from "@ui-kitten/components";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 export default function App() {
@@ -30,6 +39,22 @@ export default function App() {
   const [qrCode, SetqrCode] = useState(false);
   const [isAllerted, setisAlerted] = useState(false);
   const [isFirstOpening, SetIsFirstOpening] = useState(true);
+  // const PersonIcon = (props) => <Icon {...props} name="person-outline" />;
+  const PersonIcon = (props) => <Icon {...props} name="home-outline" />;
+
+  const BellIcon = (props) => <Icon {...props} name="search-outline" />;
+
+  const EmailIcon = (props) => <Icon {...props} name="camera" />;
+  const BottomTabBar = ({ navigation, state }) => (
+    <BottomNavigation
+      selectedIndex={state.index}
+      onSelect={(index) => navigation.navigate(state.routeNames[index])}
+    >
+      <BottomNavigationTab title="Home Page" icon={PersonIcon} />
+      <BottomNavigationTab title="Search" icon={BellIcon} />
+      <BottomNavigationTab title="Scan" icon={EmailIcon} />
+    </BottomNavigation>
+  );
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -45,48 +70,48 @@ export default function App() {
   }
 
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
-      <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen
-            name="Home Page"
-            component={Homepage}
-            options={{
-              tabBarIcon: ({ color, size }) => {
-                return <Icon name="home"></Icon>;
-              },
-            }}
-          />
-          <Tab.Screen
-            name="Search"
-            component={Search}
-            options={{
-              tabBarIcon: ({ color, size }) => {
-                return <Icon name="ios-search"></Icon>;
-              },
-            }}
-          />
-          <Tab.Screen
-            name="Scan"
-            component={Scan}
-            options={{
-              tabBarIcon: ({ color, size }) => {
-                return <Icon name="camera"></Icon>;
-              },
-            }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </ApplicationProvider>
+    <>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider {...eva} theme={eva.light}>
+        <NavigationContainer>
+          <Tab.Navigator tabBar={(props) => <BottomTabBar {...props} />}>
+            <Tab.Screen
+              name="Home Page"
+              component={Homepage}
+              // options={{
+              //   tabBarIcon: ({ color, size }) => {
+              //     return <Icon name="home"></Icon>;
+              //   },
+              // }}
+            />
+            <Tab.Screen
+              name="Search"
+              component={Search}
+              // options={{
+              //   tabBarIcon: ({ color, size }) => {
+              //     return <Icon name="ios-search"></Icon>;
+              //   },
+              // }}
+            />
+            <Tab.Screen
+              name="Scan"
+              component={Scan}
+              // options={{
+              //   tabBarIcon: ({ color, size }) => {
+              //     return <Icon name="camera"></Icon>;
+              //   },
+              // }}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </ApplicationProvider>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-
-    alignItems: "center",
   },
   title: {
     textAlign: "center",

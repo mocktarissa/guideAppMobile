@@ -3,17 +3,12 @@ import {
   Container,
   Header,
   Content,
-  Card,
   CardItem,
   Thumbnail,
-  Text,
-  Button,
-  Icon,
   Left,
   Body,
   Spinner,
   Grid,
-  List,
   DeckSwiper,
 } from "native-base";
 import {
@@ -28,6 +23,16 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import axios from "axios";
 import Loading from "../Loading";
+import {
+  Button,
+  Card,
+  Icon,
+  List,
+  StyleService,
+  Text,
+  useStyleSheet,
+} from "@ui-kitten/components";
+
 export default function PoiProfile({ navigation, route }) {
   const { poiId } = route.params;
   const { companyId } = route.params;
@@ -37,6 +42,7 @@ export default function PoiProfile({ navigation, route }) {
   const [imageSize, setImageSize] = useState(true);
 
   const [currentImage, setCurrentImage] = useState(0);
+  const styles = useStyleSheet(themedStyles);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,228 +56,337 @@ export default function PoiProfile({ navigation, route }) {
 
     fetchData();
   }, []);
-
+  // i
   return isLoading ? (
-    <Spinner />
+    <Spinner></Spinner>
   ) : (
-    <Container>
-      <Content>
-        <Container style={styles.imageMainContainer}>
-          <ImageBackground
-            source={{ uri: poi[`picture${currentImage + 1}`] }}
-            style={styles.imageMain}
-          >
-            <Container style={{ backgroundColor: "rgba(0, 20, 20,0.8)" }}>
-              <Content style={styles.imageMainTop}></Content>
-              <Text style={styles.title}>{poi.name}</Text>
-              <Text note style={styles.category}>
-                {category["name"].toUpperCase()}
-              </Text>
-              <Container style={styles.imagescontrol}>
-                {currentImage > 0 ? (
-                  <Button
-                    onPress={() => setCurrentImage(currentImage - 1)}
-                    transparent
-                    style={styles.imageLeft}
-                  >
-                    <Icon
-                      style={styles.ImageControlIcon}
-                      name="ios-arrow-dropleft"
-                    />
-                  </Button>
-                ) : (
-                  <Button
-                    onPress={() => setCurrentImage(currentImage - 1)}
-                    transparent
-                    disabled
-                    style={styles.imageLeft}
-                  >
-                    <Icon
-                      style={styles.ImageControlIcon}
-                      name="ios-arrow-dropleft"
-                    />
-                  </Button>
-                )}
-
-                {currentImage + 1 > 5 ? (
-                  <Button
-                    onPress={() => setCurrentImage(currentImage + 1)}
-                    transparent
-                    disabled
-                    style={styles.imageRight}
-                  >
-                    <Icon
-                      style={styles.ImageControlIcon}
-                      name="ios-arrow-dropright"
-                    />
-                  </Button>
-                ) : (
-                  <Button
-                    onPress={() => setCurrentImage(currentImage + 1)}
-                    transparent
-                    style={styles.imageRight}
-                  >
-                    <Icon
-                      style={styles.ImageControlIcon}
-                      name="ios-arrow-dropright"
-                    />
-                  </Button>
-                )}
-              </Container>
-            </Container>
-          </ImageBackground>
-          <Container style={styles.imageComponent}>{/* Images */}</Container>
-        </Container>
-        <Container style={styles.descriptionContainer}>
-          <Text style={{ fontSize: 25 }}>Description:</Text>
-          <ScrollView style={styles.description}>
-            <Container>
-              <Text>{poi.description}</Text>
-            </Container>
-          </ScrollView>
-
-          <CardItem>
-            <Left>
-              <Button transparent textStyle={{ color: "#87838B" }}>
-                <Icon name="thumbs-up" />
-                <Text>1,926 likes</Text>
-              </Button>
-            </Left>
-          </CardItem>
-
-          <Text style={{ marginBottom: 5, marginHorizontal: 20 }}>
-            Comments
-          </Text>
-        </Container>
-      </Content>
-    </Container>
+    <ScrollView style={styles.container}>
+      <ImageBackground
+        style={styles.image}
+        source={{ uri: poi[`picture${currentImage + 1}`] }}
+      >
+        <View
+          style={[
+            StyleSheet.absoluteFill,
+            { backgroundColor: "rgba(0, 0, 0, 0.45)" },
+          ]}
+        />
+      </ImageBackground>
+      <Card style={styles.bookingCard} appearance="filled" disabled={true}>
+        <Text style={styles.title} category="h6">
+          {poi.name.toUpperCase()}
+        </Text>
+        <Text style={styles.rentLabel} appearance="hint" category="p2">
+          {category.name.toUpperCase()}
+        </Text>
+        <Text style={styles.priceLabel} category="h6">
+          {poi.location.toUpperCase()}
+          {/* <Text>product.price.formattedScale</Text> */}
+        </Text>
+        <Button style={styles.bookButton} onPress={(onBookButtonPress) => {}}>
+          BOOK NOW
+        </Button>
+      </Card>
+      <Text style={styles.sectionLabel} category="s1">
+        About
+      </Text>
+      <Text style={styles.description} appearance="hint">
+        {poi.description}
+      </Text>
+      <Text style={styles.sectionLabel} category="s1">
+        Photos
+      </Text>
+      <List
+        contentContainerStyle={styles.imagesList}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        data={[
+          poi.picture1,
+          poi.picture2,
+          poi.picture3,
+          poi.picture4,
+          poi.picture5,
+          poi.picture6,
+        ]}
+        renderItem={({ item, index }) => (
+          <Image style={styles.imageItem} source={{ uri: item }} />
+        )}
+      />
+    </ScrollView>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  listRow: {
-    position: "absolute",
-    height: 20,
-  },
+// isLoading ? (
+// );
+//   <Spinner />
+// ) : (
+//   <Container>
+//     <Content>
+//       <Container style={styles.imageMainContainer}>
+//         <ImageBackground
+//           source={{ uri: poi[`picture${currentImage + 1}`] }}
+//           style={styles.imageMain}
+//         >
+//           <Container style={{ backgroundColor: "rgba(0, 20, 20,0.8)" }}>
+//             <Content style={styles.imageMainTop}></Content>
+//             <Text style={styles.title}>{poi.name}</Text>
+//             <Text note style={styles.category}>
+//               {category["name"].toUpperCase()}
+//             </Text>
+//             <Container style={styles.imagescontrol}>
+//               {currentImage > 0 ? (
+//                 <Button
+//                   onPress={() => setCurrentImage(currentImage - 1)}
+//                   transparent
+//                   style={styles.imageLeft}
+//                 >
+//                   <Icon
+//                     style={styles.ImageControlIcon}
+//                     name="ios-arrow-dropleft"
+//                   />
+//                 </Button>
+//               ) : (
+//                 <Button
+//                   onPress={() => setCurrentImage(currentImage - 1)}
+//                   transparent
+//                   disabled
+//                   style={styles.imageLeft}
+//                 >
+//                   <Icon
+//                     style={styles.ImageControlIcon}
+//                     name="ios-arrow-dropleft"
+//                   />
+//                 </Button>
+//               )}
 
-  fixToText: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-  separator: {
-    marginVertical: 8,
-    borderBottomColor: "#737373",
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  button: {
-    position: "absolute",
-    bottom: 0,
-    flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 36,
-    width: 20,
-  },
-  bottom: {
-    flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 36,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
+//               {currentImage + 1 > 5 ? (
+//                 <Button
+//                   onPress={() => setCurrentImage(currentImage + 1)}
+//                   transparent
+//                   disabled
+//                   style={styles.imageRight}
+//                 >
+//                   <Icon
+//                     style={styles.ImageControlIcon}
+//                     name="ios-arrow-dropright"
+//                   />
+//                 </Button>
+//               ) : (
+//                 <Button
+//                   onPress={() => setCurrentImage(currentImage + 1)}
+//                   transparent
+//                   style={styles.imageRight}
+//                 >
+//                   <Icon
+//                     style={styles.ImageControlIcon}
+//                     name="ios-arrow-dropright"
+//                   />
+//                 </Button>
+//               )}
+//             </Container>
+//           </Container>
+//         </ImageBackground>
+//         <Container style={styles.imageComponent}>{/* Images */}</Container>
+//       </Container>
+//       <Container style={styles.descriptionContainer}>
+//         <Text style={{ fontSize: 25 }}>Description:</Text>
+//         <ScrollView style={styles.description}>
+//           <Container>
+//             <Text>{poi.description}</Text>
+//           </Container>
+//         </ScrollView>
+
+//         <CardItem>
+//           <Left>
+//             <Button transparent textStyle={{ color: "#87838B" }}>
+//               <Icon name="thumbs-up" />
+//               <Text>1,926 likes</Text>
+//             </Button>
+//           </Left>
+//         </CardItem>
+
+//         <Text style={{ marginBottom: 5, marginHorizontal: 20 }}>
+//           Comments
+//         </Text>
+//       </Container>
+//     </Content>
+//   </Container>
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   listRow: {
+//     position: "absolute",
+//     height: 20,
+//   },
+
+//   fixToText: {
+//     flexDirection: "row",
+//     justifyContent: "space-evenly",
+//   },
+//   separator: {
+//     marginVertical: 8,
+//     borderBottomColor: "#737373",
+//     borderBottomWidth: StyleSheet.hairlineWidth,
+//   },
+//   button: {
+//     position: "absolute",
+//     bottom: 0,
+//     flex: 1,
+//     justifyContent: "flex-end",
+//     marginBottom: 36,
+//     width: 20,
+//   },
+//   bottom: {
+//     flex: 1,
+//     justifyContent: "flex-end",
+//     marginBottom: 36,
+//   },
+//   item: {
+//     padding: 10,
+//     fontSize: 18,
+//     height: 44,
+//   },
+//   image: {
+//     backgroundColor: "grey",
+//     height: "30%",
+//     margin: 2,
+//     width: "100%",
+//   },
+
+//   imageSmall: {
+//     backgroundColor: "grey",
+//     height: "40%",
+//     margin: 2,
+//     width: "100%",
+//   },
+
+//   description: {},
+//   logo: {
+//     height: 50,
+//     width: 50,
+//     borderRadius: 25,
+//     backgroundColor: "grey",
+//   },
+//   commentTitle: {},
+//   comments: { marginTop: 6, marginBottom: 40, overflow: "scroll" },
+
+//   imageMainContainer: {
+//     height: 340,
+//     position: "relative",
+//   },
+
+//   imageMain: {
+//     height: 300,
+//     overflow: "hidden",
+//     marginLeft: "2%",
+//     marginRight: "2%",
+//     marginVertical: "5%",
+//     borderRadius: 20,
+//     backgroundColor: "rgba(255,0,0,0)",
+//   },
+//   imageMainTop: {
+//     height: 50,
+//   },
+//   title: {
+//     textAlign: "left",
+//     marginHorizontal: 20,
+//     fontSize: 40,
+//     color: "white",
+//   },
+//   category: {
+//     color: "#6e7553",
+//     textAlign: "left",
+//     marginHorizontal: 20,
+//     fontSize: 15,
+//   },
+//   imageComponent: {
+//     height: 400,
+//   },
+//   descriptionContainer: {
+//     marginHorizontal: 20,
+//   },
+//   imagescontrol: {
+//     flex: 1,
+//     flexDirection: "row",
+//     flexWrap: "nowrap",
+//     justifyContent: "center",
+//     backgroundColor: "transparent",
+//     height: 200,
+//     marginBottom: 20,
+//     alignItems: "center",
+//   },
+//   ImageControlIcon: {
+//     height: "100%",
+//     width: 20,
+//   },
+//   imageRight: {
+//     fontSize: 20,
+//     marginLeft: "80%",
+//   },
+// });
+
+const themedStyles = StyleService.create({
+  container: {
+    backgroundColor: "background-basic-color-2",
   },
   image: {
-    backgroundColor: "grey",
-    height: "30%",
-    margin: 2,
-    width: "100%",
+    height: 360,
   },
-
-  imageSmall: {
-    backgroundColor: "grey",
-    height: "40%",
-    margin: 2,
-    width: "100%",
-  },
-
-  description: {},
-  logo: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
-    backgroundColor: "grey",
-  },
-  commentTitle: {},
-  comments: { marginTop: 6, marginBottom: 40, overflow: "scroll" },
-
-  imageMainContainer: {
-    height: 340,
-    position: "relative",
-  },
-
-  imageMain: {
-    height: 300,
-    overflow: "hidden",
-    marginLeft: "2%",
-    marginRight: "2%",
-    marginVertical: "5%",
-    borderRadius: 20,
-    backgroundColor: "rgba(255,0,0,0)",
-  },
-  imageMainTop: {
-    height: 50,
+  bookingCard: {
+    marginTop: -80,
+    margin: 16,
   },
   title: {
-    textAlign: "left",
-    marginHorizontal: 20,
-    fontSize: 40,
-    color: "white",
+    width: "65%",
   },
-  category: {
-    color: "#6e7553",
-    textAlign: "left",
-    marginHorizontal: 20,
-    fontSize: 15,
+  rentLabel: {
+    marginTop: 24,
   },
-  imageComponent: {
-    height: 400,
+  priceLabel: {
+    marginTop: 8,
   },
-  descriptionContainer: {
-    marginHorizontal: 20,
+  bookButton: {
+    position: "absolute",
+    bottom: 24,
+    right: 24,
   },
-  imagescontrol: {
-    flex: 1,
+  detailsList: {
     flexDirection: "row",
-    flexWrap: "nowrap",
-    justifyContent: "center",
-    backgroundColor: "transparent",
-    height: 200,
-    marginBottom: 20,
-    alignItems: "center",
+    marginHorizontal: -4,
+    marginVertical: 8,
   },
-  ImageControlIcon: {
-    height: "100%",
-    width: 20,
+  detailItem: {
+    marginHorizontal: 4,
+    borderRadius: 16,
   },
-  imageRight: {
-    fontSize: 20,
-    marginLeft: "80%",
+  optionList: {
+    flexDirection: "row",
+    marginHorizontal: -4,
+    marginVertical: 8,
+  },
+  optionItem: {
+    marginHorizontal: 4,
+    paddingHorizontal: 0,
+  },
+  description: {
+    marginHorizontal: 16,
+    marginVertical: 8,
+  },
+  sectionLabel: {
+    marginHorizontal: 16,
+    marginVertical: 8,
+  },
+  imagesList: {
+    padding: 8,
+    backgroundColor: "background-basic-color-2",
+  },
+  imageItem: {
+    width: 180,
+    height: 120,
+    borderRadius: 8,
+    marginHorizontal: 8,
   },
 });
-
-function Carousel() {
-  return (
-    <FlatList
-      data={slideList}
-      style={{ flex: 1 }}
-      renderItem={({ item }) => {
-        return <Slide data={item} />;
-      }}
-    />
-  );
-}
