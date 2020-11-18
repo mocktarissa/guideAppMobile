@@ -21,7 +21,7 @@ import { View, StyleSheet, ScrollView, Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import axios from "axios";
-import Loading from "./Loading";
+import Loading from "../Loading";
 export default function ShowPoiFromScan({ navigation, route }) {
   const { data } = route.params;
   const { companyId } = route.params;

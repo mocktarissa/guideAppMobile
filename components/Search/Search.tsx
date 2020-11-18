@@ -20,42 +20,45 @@ import { StyleSheet, Linking, Image } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import BottomNav from "./FooterTab";
+import BottomNav from "../FooterTab";
 import axios from "axios";
-import Loading from "./Loading";
-import ListCompany from "./ListCompany";
-import CompanyDetails from "./CompanyDetails";
-import PoiProfile from "./PoiProfile";
-import ShowPoiFromScan from "./ShowPoiFromScan";
+import Loading from "../Loading";
+import ListCompany from "../Company/ListCompany";
+import CompanyDetails from "../Company/CompanyDetails";
+import PoiProfile from "../POI/PoiProfile";
+import ShowPoiFromScan from "../Scan/ShowPoiFromScan";
 import { FlatList } from "react-native-gesture-handler";
 export default function Search({ navigation }) {
   const [query, setQuery] = useState("");
-  const [result, setResult] = useState([]);
+  const [result, setResult] = useState({ companies: [], pois: [] });
   const [company, setCompany] = useState([]);
   const [searching, setSearching] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios(
-        "http://myguideapi.herokuapp.com/api/company/"
-      );
-      setCompany(result.data);
-    };
-    fetchData();
-  }, []);
+  const [isFound, setIsFound] = useState(false);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const result = await axios(
+  //       "http://myguideapi.herokuapp.com/api/search/"
+  //     );
+  //     setCompany(result.data);
+  //   };
+  //   fetchData();
+  // }, []);
 
   function search() {
     setSearching(true);
-    let isfound = company.find((e) => e.name === query);
-    if (isfound) {
-      setResult([isfound]);
-    } else setResult([{ name: "Not Found" }]);
+    const fetchData = async () => {
+      const searchResult = await axios(
+        `http://myguideapi.herokuapp.com/api/search?query=${query}`
+      );
+      setResult(searchResult.data);
+    };
+    fetchData();
+
     setSearching(false);
+    console.log(result);
   }
 
-  function cancel() {
-
-  }
+  function cancel() {}
 
   return (
     <Container>
@@ -72,44 +75,81 @@ export default function Search({ navigation }) {
           </Button>
         </Item>
       </Header>
-      {searching ? <Spinner /> : <></>}
-      <Container>
-        <List>
-          {result.map((item) => {
-            return (
-              <ListItem
-                onPress={() =>
-                  navigation.navigate("Company Details", {
-                    companyId: item.id,
-                  })
-                }
-              >
-                <Grid style={styles.listItem}>
-                  <Col style={styles.ImgaeWrapper}>
-                    {item.logo == "placeholder.jpg" ? (
-                      <Image
-                        style={styles.Image}
-                        source={require("./placeholder.png")}
-                      />
-                    ) : (
-                      <Image
-                        style={styles.Image}
-                        source={{
-                          uri: item.logo,
-                        }}
-                      />
-                    )}
-                  </Col>
-                  <Col style={{ height: 20, width: "50%" }}>
-                    <Text style={styles.TextCenter}>{item.name}</Text>
-                  </Col>
-                  <Col></Col>
-                </Grid>
-              </ListItem>
-            );
-          })}
-        </List>
-      </Container>
+      {searching ? (
+        <Spinner />
+      ) : (
+        <Container>
+          <List>
+            {result.companies.map((item) => {
+              return (
+                <ListItem
+                  onPress={() =>
+                    navigation.navigate("Company Details", {
+                      companyId: item.id,
+                    })
+                  }
+                >
+                  <Grid style={styles.listItem}>
+                    <Col style={styles.ImgaeWrapper}>
+                      {item.logo == "placeholder.jpg" ? (
+                        <Image
+                          style={styles.Image}
+                          source={require("./placeholder.png")}
+                        />
+                      ) : (
+                        <Image
+                          style={styles.Image}
+                          source={{
+                            uri: item.logo,
+                          }}
+                        />
+                      )}
+                    </Col>
+                    <Col style={{ height: 20, width: "50%" }}>
+                      <Text style={styles.TextCenter}>{item.name}</Text>
+                    </Col>
+                    <Col></Col>
+                  </Grid>
+                </ListItem>
+              );
+            })}
+
+            {result.pois.map((item) => {
+              return (
+                <ListItem
+                  onPress={() =>
+                    navigation.navigate("Poi Profile", {
+                      companyId: item.id,
+                    })
+                  }
+                >
+                  <Grid style={styles.listItem}>
+                    <Col style={styles.ImgaeWrapper}>
+                      {item.picture1 == "placeholder.jpg" ? (
+                        <Image
+                          style={styles.Image}
+                          source={require("./placeholder.png")}
+                        />
+                      ) : (
+                        <Image
+                          style={styles.Image}
+                          source={{
+                            uri: item.picture1,
+                          }}
+                        />
+                      )}
+                    </Col>
+                    <Col style={{ height: 20, width: "50%" }}>
+                      <Text style={styles.TextCenter}>{item.name}</Text>
+                    </Col>
+                    <Col></Col>
+                  </Grid>
+                </ListItem>
+              );
+            })}
+          </List>
+        </Container>
+      )}
     </Container>
   );
 }

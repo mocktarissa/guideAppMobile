@@ -27,7 +27,7 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import axios from "axios";
-import Loading from "./Loading";
+import Loading from "../Loading";
 export default function PoiProfile({ navigation, route }) {
   const { poiId } = route.params;
   const { companyId } = route.params;
@@ -61,7 +61,7 @@ export default function PoiProfile({ navigation, route }) {
             source={{ uri: poi[`picture${currentImage + 1}`] }}
             style={styles.imageMain}
           >
-            <Container style={{ backgroundColor: "rgba(0, 20, 20,0.6)" }}>
+            <Container style={{ backgroundColor: "rgba(0, 20, 20,0.8)" }}>
               <Content style={styles.imageMainTop}></Content>
               <Text style={styles.title}>{poi.name}</Text>
               <Text note style={styles.category}>
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   category: {
-    color: "#979e7b",
+    color: "#6e7553",
     textAlign: "left",
     marginHorizontal: 20,
     fontSize: 15,

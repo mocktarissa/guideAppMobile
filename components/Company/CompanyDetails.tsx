@@ -32,7 +32,7 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import axios from "axios";
-import Loading from "./Loading";
+import Loading from "../Loading";
 export default function CompanyDetails({ navigation, route }) {
   const { companyId } = route.params;
   const [pois, setPois] = useState([]);

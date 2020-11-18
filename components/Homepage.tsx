@@ -20,10 +20,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import BottomNav from "./FooterTab";
 import axios from "axios";
 import Loading from "./Loading";
-import ListCompany from "./ListCompany";
-import CompanyDetails from "./CompanyDetails";
-import PoiProfile from "./PoiProfile";
-import ShowPoiFromScan from "./ShowPoiFromScan";
+import ListCompany from "./Company/ListCompany";
+import CompanyDetails from "./Company/CompanyDetails";
+import PoiProfile from "./POI/PoiProfile";
+import ShowPoiFromScan from "./Scan/ShowPoiFromScan";
 export default function Homepage({ navigation }) {
   const [places, setPlaces] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

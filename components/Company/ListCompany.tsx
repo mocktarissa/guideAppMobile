@@ -17,7 +17,7 @@ import { StyleSheet, Linking, Image, Platform } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import BottomNav from "./FooterTab";
+import BottomNav from "../FooterTab";
 import axios from "axios";
 export default function Homepage({ navigation }) {
   const [places, setPlaces] = useState([]);

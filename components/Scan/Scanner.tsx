@@ -2,7 +2,7 @@ import { View, StyleSheet, Button, Text } from "react-native";
 import React, { useState } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { nativeTheme } from "electron";
-import PoiProfile from "./PoiProfile";
+import PoiProfile from "../POI/PoiProfile";
 import axios from "axios";
 export default function Scanner({ navigation }) {
   const [scanned, setScanned] = useState(false);
