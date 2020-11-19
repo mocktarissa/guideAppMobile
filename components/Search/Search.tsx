@@ -6,17 +6,30 @@ import {
   Content,
   List,
   ListItem,
-  Button,
-  Text,
-  Icon,
   Right,
   Item,
-  Input,
   Spinner,
 } from "native-base";
+
+import {
+  Input,
+  Layout,
+  Icon,
+  Button,
+  Text,
+  IconRegistry,
+} from "@ui-kitten/components";
+import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { Col, Row, Grid } from "react-native-easy-grid";
 
-import { StyleSheet, Linking, Image } from "react-native";
+import {
+  StyleSheet,
+  Linking,
+  Image,
+  View,
+  ScrollView,
+  TextInput,
+} from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -55,96 +68,41 @@ export default function Search({ navigation }) {
     fetchData();
 
     setSearching(false);
+    setQuery("");
     console.log(result);
   }
 
-  function cancel() {}
+  function cancel() {
+    setQuery("");
+  }
 
   return (
-    <Container>
-      <Header searchBar rounded>
-        <Item>
-          <Icon name="ios-search" />
-          <Input
-            placeholder="Search"
-            onChangeText={(text) => setQuery(text)}
-            onEndEditing={() => search()}
-          />
-          <Button onPress={() => cancel()} transparent>
-            <Icon name="ios-close" />
-          </Button>
-        </Item>
-      </Header>
-      {searching ? (
-        <Spinner />
-      ) : (
-        <Container>
-          <List>
-            {result.companies.map((item) => {
-              return (
-                <ListItem
-                  onPress={() =>
-                    navigation.navigate("Company Details", {
-                      companyId: item.id,
-                    })
-                  }
-                >
-                  <Grid style={styles.listItem}>
-                    <Col style={styles.ImgaeWrapper}>
-                      {item.logo == "placeholder.jpg" ? (
-                        <></>
-                      ) : (
-                        <Image
-                          style={styles.Image}
-                          source={{
-                            uri: item.logo,
-                          }}
-                        />
-                      )}
-                    </Col>
-                    <Col style={{ height: 20, width: "50%" }}>
-                      <Text style={styles.TextCenter}>{item.name}</Text>
-                    </Col>
-                    <Col></Col>
-                  </Grid>
-                </ListItem>
-              );
-            })}
+    <Layout style={styles.container}>
+      <Layout style={styles.inputLAyout}>
+        <Input
+          accessoryRight={() => (
+            <Icon style={styles.input} name="close-outline"></Icon>
+          )}
+          accessoryLeft={() => <Icon style={styles.input} name="search"></Icon>}
+          captionIcon={() => <Icon style={styles.input} name="search"></Icon>}
+          style={styles.input}
+          placeholder="Search Item"
+          onChangeText={(text) => setQuery(text)}
+          value={query}
+          onEndEditing={() => search()}
+        />
 
-            {result.pois.map((item) => {
-              return (
-                <ListItem
-                  onPress={() =>
-                    navigation.navigate("Poi Profile", {
-                      companyId: item.id,
-                    })
-                  }
-                >
-                  <Grid style={styles.listItem}>
-                    <Col style={styles.ImgaeWrapper}>
-                      {item.picture1 == "placeholder.jpg" ? (
-                        <></>
-                      ) : (
-                        <Image
-                          style={styles.Image}
-                          source={{
-                            uri: item.picture1,
-                          }}
-                        />
-                      )}
-                    </Col>
-                    <Col style={{ height: 20, width: "50%" }}>
-                      <Text style={styles.TextCenter}>{item.name}</Text>
-                    </Col>
-                    <Col></Col>
-                  </Grid>
-                </ListItem>
-              );
+        {searching ? (
+          <Spinner />
+        ) : (
+          <Layout style={styles.results}>
+            {result.companies.map((item) => {
+              return <Text>{item.name}</Text>;
             })}
-          </List>
-        </Container>
-      )}
-    </Container>
+          </Layout>
+        )}
+      </Layout>
+    </Layout>
   );
 }
 
@@ -203,117 +161,25 @@ export default function Search({ navigation }) {
 // </View>
 
 const styles = StyleSheet.create({
+  input: {
+    height: 10,
+    marginHorizontal: 4,
+  },
   container: {
     flex: 1,
-    justifyContent: "center",
+    flexDirection: "column",
+  },
+  inputLAyout: {
+    marginTop: 40,
+    flex: 1,
     alignItems: "center",
   },
-  listRow: {
-    position: "absolute",
-    height: 20,
+  layout: {
+    marginTop: 40,
   },
-  title: {
-    textAlign: "center",
-    marginVertical: 8,
-  },
-  fixToText: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-  separator: {
-    marginVertical: 8,
-    borderBottomColor: "#737373",
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  button: {
-    position: "absolute",
-    bottom: 0,
+  results: {
     flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 36,
-    width: 20,
-  },
-  bottom: {
-    flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 36,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-  listRow: {
-    position: "absolute",
-    height: 20,
-  },
-  title: {
-    textAlign: "center",
-    marginVertical: 8,
-  },
-  fixToText: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-  separator: {
-    marginVertical: 8,
-    borderBottomColor: "#737373",
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  button: {
-    position: "absolute",
-    bottom: 0,
-    flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 36,
-    width: 20,
-  },
-  bottom: {
-    flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 36,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-  btnRed: {
-    backgroundColor: "red",
-    borderRadius: 8,
-    height: 30,
-    width: "100%",
-  },
-  listItem: {
-    flex: 1,
-    marginBottom: 25,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  listItemNotImage: {},
-
-  BtnText: {
-    fontSize: 8,
-    textAlign: "center",
-    width: "100%",
-    height: "100%",
-  },
-  TextCenter: {
-    alignSelf: "flex-start",
-    marginLeft: 30,
-  },
-  Image: {
-    height: "100%",
-    width: "100%",
-  },
-  ImgaeWrapper: {
-    backgroundColor: "grey",
-    height: 70,
-    width: 70,
-    borderRadius: 50,
-  },
-  blue: {
-    backgroundColor: "white",
+    marginTop: 100,
+    marginLeft: 2,
   },
 });
