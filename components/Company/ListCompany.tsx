@@ -69,7 +69,7 @@ export default function Homepage({ navigation }) {
             <Text>B</Text>
           </ListItem>
            */}
-          {places.map((item) => {
+          {places.map((item, index) => {
             return (
               <ListItem
                 onPress={() =>
@@ -77,6 +77,7 @@ export default function Homepage({ navigation }) {
                     companyId: item.id,
                   })
                 }
+                key={index}
               >
                 <Grid style={styles.listItem}>
                   <Col style={styles.ImgaeWrapper}>
