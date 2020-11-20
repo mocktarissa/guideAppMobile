@@ -1,15 +1,6 @@
 import React, { Component, useState, useEffect, useRef } from "react";
 
-import {
-  Container,
-  Header,
-  Content,
-  List,
-  ListItem,
-  Right,
-  Item,
-  Spinner,
-} from "native-base";
+import { Container, Header, Content, ListItem, Right, Item } from "native-base";
 
 import {
   Input,
@@ -17,7 +8,10 @@ import {
   Icon,
   Button,
   Text,
+  List,
   IconRegistry,
+  Card,
+  Spinner,
 } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -29,6 +23,7 @@ import {
   View,
   ScrollView,
   TextInput,
+  ImageBackground,
 } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -56,15 +51,31 @@ export default function Search({ navigation }) {
   //   };
   //   fetchData();
   // }, []);
+  const ClockIcon = (style: ImageStyle): IconElement => (
+    <Icon {...style} name="clock-outline" />
+  );
 
+  const HeartIcon = (style: ImageStyle): IconElement => (
+    <Icon {...style} name="heart-outline" />
+  );
+
+  const PlusIcon = (style: ImageStyle): IconElement => (
+    <Icon {...style} name="plus" />
+  );
+
+  const ShareIcon = (style: ImageStyle): IconElement => (
+    <Icon {...style} name="share-outline" />
+  );
   function search() {
     setSearching(true);
+
     const fetchData = async () => {
       const searchResult = await axios(
         `http://myguideapi.herokuapp.com/api/search?query=${query}`
       );
       setResult(searchResult.data);
     };
+
     fetchData();
 
     setSearching(false);
@@ -75,7 +86,59 @@ export default function Search({ navigation }) {
   function cancel() {
     setQuery("");
   }
+  const renderItemHeader = ({ company }) => (
+    <ImageBackground style={styles.itemHeader} source={company.logo}>
+      <View style={styles.itemHeaderDetails}>
+        <Text category="h4" status="control">
+          {company.name}
+        </Text>
+        <Text category="s1" status="control">
+          {`${company.address1}h`}
+        </Text>
+      </View>
+    </ImageBackground>
+  );
 
+  const renderItemFooter = () => (
+    <View style={styles.itemFooter}>
+      <View style={styles.itemReactionsContainer}>
+        <Button
+          style={styles.iconButton}
+          appearance="ghost"
+          status="basic"
+          icon={ShareIcon}
+        />
+        <Button
+          style={styles.iconButton}
+          appearance="ghost"
+          status="basic"
+          icon={HeartIcon}
+        />
+      </View>
+      <Button style={styles.itemAddButton} appearance="ghost" icon={PlusIcon}>
+        Add Training
+      </Button>
+    </View>
+  );
+  const RenderItem = ({ company }) => (
+    <Card
+      style={styles.item}
+      header={() => renderItemHeader(company)}
+      footer={renderItemFooter}
+    >
+      <Layout style={styles.itemStyxContainer} level="2">
+        <Text style={styles.itemStyxText} category="h6">
+          STYX
+        </Text>
+        <Button style={styles.itemStyxButton} size="tiny" icon={ClockIcon}>
+          {`${company.name}`}
+        </Button>
+      </Layout>
+      <Text style={styles.itemDescription} category="s1">
+        {company.description}
+      </Text>
+    </Card>
+  );
   return (
     <Layout style={styles.container}>
       <Layout style={styles.inputLAyout}>
@@ -91,78 +154,59 @@ export default function Search({ navigation }) {
           value={query}
           onEndEditing={() => search()}
         />
-
-        {searching ? (
-          <Spinner />
-        ) : (
-          <Layout style={styles.results}>
-            {result.companies.map((item) => {
-              return <Text>{item.name}</Text>;
-            })}
-          </Layout>
-        )}
       </Layout>
+
+      <Spinner size="giant" />
+
+      <List
+        style={styles.list}
+        contentContainerStyle={styles.listContent}
+        data={result.companies}
+        renderItem={({ item, index }) => (
+          <Card
+            style={styles.item}
+            header={() => (
+              <ImageBackground
+                style={styles.itemHeader}
+                source={{ uri: item.logo }}
+              >
+                <View style={styles.itemHeaderDetails}>
+                  <Text category="h4" status="control">
+                    {item.name}
+                  </Text>
+                  <Text category="s1" status="control">
+                    {item.city}
+                  </Text>
+                </View>
+              </ImageBackground>
+            )}
+            footer={renderItemFooter}
+          >
+            <Layout style={styles.itemStyxContainer} level="2">
+              <Text style={styles.itemStyxText} category="h6">
+                {item.name}
+              </Text>
+              <Button
+                style={styles.itemStyxButton}
+                size="tiny"
+                icon={ClockIcon}
+              >
+                {`${item.name} min`}
+              </Button>
+            </Layout>
+            <Text style={styles.itemDescription} category="s1">
+              {item.description}
+            </Text>
+          </Card>
+        )}
+      />
     </Layout>
   );
 }
 
-{
-  /* <Col style={{ height: "100%", width: "29%" }}>
-  <Button
-    onPress={() => Linking.openURL("google.navigation:q=100+101")}
-    style={styles.btnRed}
-  >
-    <Text style={styles.BtnText}>Show in map</Text>
-  </Button>
-  <Button
-    style={{
-      borderRadius: 8,
-      height: 30,
-      width: "100%",
-      textAlign: "center",
-    }}
-    onPress={() => callNumber(item.phone_number)}
-  >
-    <Text>Call</Text>
-  </Button>
-</Col>; */
-}
-
-// <View style={styles.container}>
-//   <Text>{places.length}</Text>
-//   {isLoading ? <Text> Loading</Text> : <Text>Loaded</Text>}
-//   <FlatList
-//     data={places}
-//     renderItem={({ item }) => (
-//       <Text
-//         style={styles.item}
-//         onPress={() =>
-//           navigation.navigate("CompanyDetails", {
-//             companyId: item.id,
-//           })
-//         }
-//       >
-//         {item.name}
-//       </Text>
-//     )}
-//   />
-
-//   <View style={styles.bottom}>
-//     <Button
-//       title="Scan QR"
-//       onPress={() =>
-//         navigation.navigate("Scan", {
-//           places: places,
-//           handleChange: handleChange,
-//         })
-//       }
-//     ></Button>
-//   </View>
-// </View>
-
 const styles = StyleSheet.create({
   input: {
-    height: 10,
+    height: "100%",
     marginHorizontal: 4,
   },
   container: {
@@ -173,6 +217,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     flex: 1,
     alignItems: "center",
+    maxHeight: "5%",
   },
   layout: {
     marginTop: 40,
@@ -181,5 +226,62 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 100,
     marginLeft: 2,
+    flexDirection: "column",
+  },
+  list: {
+    flex: 1,
+    marginTop: 40,
+  },
+  listContent: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  item: {
+    marginVertical: 8,
+    borderRadius: 5,
+  },
+  itemHeader: {
+    minHeight: 220,
+    padding: 24,
+  },
+  itemHeaderDetails: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.45)",
+  },
+  itemStyxContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderRadius: 4,
+    marginHorizontal: -8,
+  },
+  itemStyxText: {
+    marginHorizontal: 16,
+    marginVertical: 14,
+  },
+  itemStyxButton: {
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    borderRadius: 24,
+  },
+  itemDescription: {
+    marginHorizontal: -8,
+    marginTop: 16,
+  },
+  itemFooter: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  itemReactionsContainer: {
+    flexDirection: "row",
+  },
+  itemAddButton: {
+    flexDirection: "row-reverse",
+    paddingHorizontal: 0,
+  },
+  iconButton: {
+    paddingHorizontal: 0,
   },
 });
