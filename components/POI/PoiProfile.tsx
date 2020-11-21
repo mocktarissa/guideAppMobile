@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+oi import React, { Component, useState, useEffect } from "react";
 import {
   Container,
   Header,
@@ -87,8 +87,7 @@ export default function PoiProfile({ navigation, route }) {
           {category.name.toUpperCase()}
         </Text>
         <Text style={styles.priceLabel} category="h6">
-          {poi.location.toUpperCase()}
-          {/* <Text>product.price.formattedScale</Text> */}
+profile refactoring           {poi.location.toUpperCase()}
         </Text>
         <Button style={styles.bookButton} onPress={(onBookButtonPress) => {}}>
           BOOK NOW
