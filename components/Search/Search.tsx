@@ -42,6 +42,7 @@ export default function Search({ navigation }) {
   const [company, setCompany] = useState([]);
   const [searching, setSearching] = useState(false);
   const [isFound, setIsFound] = useState(false);
+  const [searchResult, setSearchResult] = useState("");
   // useEffect(() => {
   //   const fetchData = async () => {
   //     const result = await axios(
@@ -73,7 +74,8 @@ export default function Search({ navigation }) {
       const searchResult = await axios(
         `http://myguideapi.herokuapp.com/api/search?query=${query}`
       );
-      setResult(searchResult.data);
+      if (searchResult.data.length === 0) setSearchResult("Not Found");
+      else setResult(searchResult.data);
     };
 
     fetchData();
@@ -156,19 +158,19 @@ export default function Search({ navigation }) {
         />
       </Layout>
 
-      <Spinner size="giant" />
-
+      {/* <Spinner size="giant" /> */}
+      <Text category=""></Text>
       <List
         style={styles.list}
         contentContainerStyle={styles.listContent}
-        data={result.companies}
+        data={[...result.companies, ...result.pois]}
         renderItem={({ item, index }) => (
           <Card
             style={styles.item}
             header={() => (
               <ImageBackground
                 style={styles.itemHeader}
-                source={{ uri: item.logo }}
+                source={{ uri: item.logo || item.picture1 }}
               >
                 <View style={styles.itemHeaderDetails}>
                   <Text category="h4" status="control">
@@ -195,10 +197,11 @@ export default function Search({ navigation }) {
               </Button>
             </Layout>
             <Text style={styles.itemDescription} category="s1">
-              {item.description}
+              {/* /{item.description.slice(0, 125)} ...{" "} */}
             </Text>
           </Card>
         )}
+        ListEmptyComponent={() => <Text>{searchResult}</Text>}
       />
     </Layout>
   );
@@ -230,7 +233,7 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
-    marginTop: 40,
+    marginTop: 0,
   },
   listContent: {
     paddingHorizontal: 16,
