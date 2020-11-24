@@ -87,7 +87,7 @@ export default function PoiProfile({ navigation, route }) {
           {category.name.toUpperCase()}
         </Text>
         <Text style={styles.priceLabel} category="h6">
-          profile refactoring {poi.location.toUpperCase()}
+          {poi.location.toUpperCase()}
         </Text>
         <Button style={styles.bookButton} onPress={(onBookButtonPress) => {}}>
           BOOK NOW

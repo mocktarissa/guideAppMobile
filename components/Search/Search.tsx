@@ -9,9 +9,9 @@ import {
   Button,
   Text,
   List,
-  IconRegistry,
   Card,
   Spinner,
+  IconElement,
 } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -24,6 +24,7 @@ import {
   ScrollView,
   TextInput,
   ImageBackground,
+  ImageStyle,
 } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -36,6 +37,9 @@ import CompanyDetails from "../Company/CompanyDetails";
 import PoiProfile from "../POI/PoiProfile";
 import ShowPoiFromScan from "../Scan/ShowPoiFromScan";
 import { FlatList } from "react-native-gesture-handler";
+import { SafeAreaConsumer, SafeAreaView } from "react-native-safe-area-context";
+import { v4 as uuidv4 } from 'uuid';
+
 export default function Search({ navigation }) {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState({ companies: [], pois: [] });
@@ -43,15 +47,7 @@ export default function Search({ navigation }) {
   const [searching, setSearching] = useState(false);
   const [isFound, setIsFound] = useState(false);
   const [searchResult, setSearchResult] = useState("");
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const result = await axios(
-  //       "http://myguideapi.herokuapp.com/api/search/"
-  //     );
-  //     setCompany(result.data);
-  //   };
-  //   fetchData();
-  // }, []);
+
   const ClockIcon = (style: ImageStyle): IconElement => (
     <Icon {...style} name="clock-outline" />
   );
@@ -142,106 +138,150 @@ export default function Search({ navigation }) {
     </Card>
   );
   return (
-    <Layout style={styles.container}>
-      <Layout style={styles.inputLAyout}>
-        <Input
-          accessoryRight={() => (
-            <Icon style={styles.input} name="close-outline"></Icon>
-          )}
-          accessoryLeft={() => <Icon style={styles.input} name="search"></Icon>}
-          captionIcon={() => <Icon style={styles.input} name="search"></Icon>}
-          style={styles.input}
-          placeholder="Search Item"
-          onChangeText={(text) => setQuery(text)}
-          value={query}
-          onEndEditing={() => search()}
-        />
-      </Layout>
+    <View style={{ flex: 1 }}>
+      <Input
+        accessoryRight={() => (
+          <Icon
+            style={{
+              tintColor: "#000000",
+              resizeMode: "contain",
+              height: 24,
+              width: 20,
+            }}
+            name="close-outline"
+            onPress={() => cancel()}
+          ></Icon>
+        )}
+        accessoryLeft={() => (
+          <Icon
+            style={{
+              tintColor: "#000000",
+              resizeMode: "contain",
+              height: 24,
+              width: 24,
+            }}
+            name="search"
+          ></Icon>
+        )}
+        style={styles.input}
+        placeholder="Search Item"
+        onChangeText={(text) => setQuery(text)}
+        value={query}
+        onEndEditing={() => search()}
+      />
+      <Layout style={styles.container}>
+        <ScrollView>
+          {/* <Layout style={styles.inputLAyout}></Layout> */}
 
-      {/* <Spinner size="giant" /> */}
-      <Text category=""></Text>
-      <List
-        style={styles.list}
-        contentContainerStyle={styles.listContent}
-        data={[...result.companies, ...result.pois]}
-        renderItem={({ item, index }) => (
-          <Card
-            style={styles.item}
-            header={() => (
-              <ImageBackground
-                style={styles.itemHeader}
-                source={{ uri: item.logo || item.picture1 }}
+          {/* <Spinner size="giant" /> */}
+
+          <List
+            style={styles.list}
+            contentContainerStyle={styles.listContent}
+            data={[...result.companies, ...result.pois]}
+            renderItem={({ item, index }) => (
+              <Card
+              key={uuidv4() }
+                style={styles.item}
+                header={() => (
+                  <ImageBackground
+                    style={styles.itemHeader}
+                    source={{ uri: item.logo || item.picture1 }}
+                  >
+                    <View
+                      style={[
+                        StyleSheet.absoluteFill,
+                        styles.itemHeaderDetails,
+                      ]}
+                    >
+                      <Text category="h4" status="control">
+                        {item.name}
+                      </Text>
+                      <Text category="s1" status="control">
+                        {item.city}
+                      </Text>
+                    </View>
+                  </ImageBackground>
+                )}
+                onPress={() => {
+                  item.hasOwnProperty("picture1")
+                    ? navigation.navigate("Poi Profile", {
+                        poiId: item.id,
+                        companyId: item.company_id,
+                      })
+                    : navigation.navigate("Company Details", {
+                        companyId: item.id,
+                      });
+                }}
               >
-                <View style={styles.itemHeaderDetails}>
-                  <Text category="h4" status="control">
+                <Layout style={styles.itemStyxContainer} level="2">
+                  <Text style={styles.itemStyxText} category="h6">
                     {item.name}
                   </Text>
-                  <Text category="s1" status="control">
-                    {item.city}
-                  </Text>
-                </View>
-              </ImageBackground>
+                  <Button
+                    style={styles.itemStyxButton}
+                    size="tiny"
+                    icon={ClockIcon}
+                  >
+                    {item.location || item.city}
+                  </Button>
+                </Layout>
+                <Text style={styles.itemDescription} category="s1">
+                  { |
+                    (item.description && item.description.slice(0, 125))}{" "}
+                  ...{" "}
+                </Text>
+              </Card>
             )}
-            footer={renderItemFooter}
-          >
-            <Layout style={styles.itemStyxContainer} level="2">
-              <Text style={styles.itemStyxText} category="h6">
-                {item.name}
-              </Text>
-              <Button
-                style={styles.itemStyxButton}
-                size="tiny"
-                icon={ClockIcon}
-              >
-                {`${item.name} min`}
-              </Button>
-            </Layout>
-            <Text style={styles.itemDescription} category="s1">
-              {/* /{item.description.slice(0, 125)} ...{" "} */}
-            </Text>
-          </Card>
-        )}
-        ListEmptyComponent={() => <Text>{searchResult}</Text>}
-      />
-    </Layout>
+            ListEmptyComponent={() => <Text>{searchResult}</Text>}
+          />
+        </ScrollView>
+      </Layout>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   input: {
-    height: "100%",
-    marginHorizontal: 4,
+    height: 40,
+    marginTop: "5%",
   },
   container: {
     flex: 1,
     flexDirection: "column",
+    height: "100%",
   },
-  inputLAyout: {
-    marginTop: 40,
-    flex: 1,
-    alignItems: "center",
-    maxHeight: "5%",
-  },
-  layout: {
-    marginTop: 40,
-  },
+
+  layout: {},
   results: {
     flex: 1,
-    marginTop: 100,
+    // marginTop: 5,
     marginLeft: 2,
     flexDirection: "column",
   },
   list: {
     flex: 1,
     marginTop: 0,
+    height: "100%",
   },
   listContent: {
     paddingHorizontal: 16,
     paddingVertical: 8,
+    height: "100%",
   },
   item: {
     marginVertical: 8,
     borderRadius: 5,
+    backgroundColor: "rgb(245,255,250)",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 10,
   },
   itemHeader: {
     minHeight: 220,
@@ -252,6 +292,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.45)",
+    padding: 4,
   },
   itemStyxContainer: {
     flexDirection: "row",
