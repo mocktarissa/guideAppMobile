@@ -25,6 +25,7 @@ import {
   TextInput,
   ImageBackground,
   ImageStyle,
+  Dimensions,
 } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -39,7 +40,8 @@ import ShowPoiFromScan from "../Scan/ShowPoiFromScan";
 import { FlatList } from "react-native-gesture-handler";
 import { SafeAreaConsumer, SafeAreaView } from "react-native-safe-area-context";
 // import { v4 as uuidv4 } from "uuid";
-
+const ScreenHeight = Dimensions.get("window").height;
+const notifbar = Dimensions.get("screen").height;
 export default function Search({ navigation }) {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState({ companies: [], pois: [] });
@@ -67,11 +69,20 @@ export default function Search({ navigation }) {
     setSearching(true);
 
     const fetchData = async () => {
+      setResult({ companies: [], pois: [] });
       const searchResult = await axios(
         `http://myguideapi.herokuapp.com/api/search?query=${query}`
       );
-      if (searchResult.data.length === 0) setSearchResult("Not Found");
+      if (
+        searchResult.data.companies.length + searchResult.data.pois.length ===
+        0
+      )
+        setSearchResult("Not Found");
       else setResult(searchResult.data);
+      console.log({
+        length:
+          searchResult.data.companies.length + searchResult.data.pois.length,
+      });
     };
 
     fetchData();
@@ -138,7 +149,7 @@ export default function Search({ navigation }) {
     </Card>
   );
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, height: ScreenHeight }}>
       <Input
         accessoryRight={() => (
           <Icon
@@ -169,72 +180,81 @@ export default function Search({ navigation }) {
         value={query}
         onEndEditing={() => search()}
       />
-      <Layout style={styles.container}>
-        <ScrollView>
-          {/* <Layout style={styles.inputLAyout}></Layout> */}
+      {searching ? (
+        <Spinner size="giant"></Spinner>
+      ) : (
+        <Layout style={styles.container}>
+          <ScrollView>
+            {/* <Layout style={styles.inputLAyout}></Layout> */}
 
-          {/* <Spinner size="giant" /> */}
+            {/* <Spinner size="giant" /> */}
 
-          <List
-            style={styles.list}
-            contentContainerStyle={styles.listContent}
-            data={[...result.companies, ...result.pois]}
-            renderItem={({ item, index }) => (
-              <Card
-                key={index}
-                style={styles.item}
-                header={() => (
-                  <ImageBackground
-                    style={styles.itemHeader}
-                    source={{ uri: item.logo || item.picture1 }}
-                  >
-                    <View
-                      style={[
-                        StyleSheet.absoluteFill,
-                        styles.itemHeaderDetails,
-                      ]}
+            <List
+              style={styles.list}
+              contentContainerStyle={styles.listContent}
+              data={[...result.companies, ...result.pois]}
+              renderItem={({ item, index }) => (
+                <Card
+                  key={index}
+                  style={styles.item}
+                  header={() => (
+                    <ImageBackground
+                      style={styles.itemHeader}
+                      source={{ uri: item.logo || item.picture1 }}
                     >
-                      <Text category="h4" status="control">
-                        {item.name}
-                      </Text>
-                      <Text category="s1" status="control">
-                        {item.city}
-                      </Text>
-                    </View>
-                  </ImageBackground>
-                )}
-                onPress={() => {
-                  item.hasOwnProperty("picture1")
-                    ? navigation.navigate("Poi Profile", {
-                        poiId: item.id,
-                        companyId: item.company_id,
-                      })
-                    : navigation.navigate("Company Details", {
-                        companyId: item.id,
-                      });
-                }}
-              >
-                <Layout style={styles.itemStyxContainer} level="2">
-                  <Text style={styles.itemStyxText} category="h6">
-                    {item.name}
+                      <View
+                        style={[
+                          StyleSheet.absoluteFill,
+                          styles.itemHeaderDetails,
+                        ]}
+                      >
+                        <Text category="h4" status="control">
+                          {item.name}
+                        </Text>
+                        <Text category="s1" status="control">
+                          {item.city}
+                        </Text>
+                      </View>
+                    </ImageBackground>
+                  )}
+                  onPress={() => {
+                    item.hasOwnProperty("picture1")
+                      ? navigation.navigate("Poi Profile", {
+                          poiId: item.id,
+                          companyId: item.company_id,
+                        })
+                      : navigation.navigate("Company Details", {
+                          companyId: item.id,
+                        });
+                  }}
+                >
+                  <Layout style={styles.itemStyxContainer} level="2">
+                    <Text style={styles.itemStyxText} category="h6">
+                      {item.name}
+                    </Text>
+                    <Button
+                      style={styles.itemStyxButton}
+                      size="tiny"
+                      icon={ClockIcon}
+                    >
+                      {item.location || item.city}
+                    </Button>
+                  </Layout>
+                  <Text style={styles.itemDescription} category="s1">
+                    {item.description && item.description.slice(0, 125)} ...
                   </Text>
-                  <Button
-                    style={styles.itemStyxButton}
-                    size="tiny"
-                    icon={ClockIcon}
-                  >
-                    {item.location || item.city}
-                  </Button>
-                </Layout>
-                <Text style={styles.itemDescription} category="s1">
-                  {item.description && item.description.slice(0, 125)} ...
-                </Text>
-              </Card>
-            )}
-            ListEmptyComponent={() => <Text>{searchResult}</Text>}
-          />
-        </ScrollView>
-      </Layout>
+                </Card>
+              )}
+              ListEmptyComponent={() => (
+                <View style={styles.container}>
+                  <Spinner size="giant"></Spinner>
+                  <Text>{searchResult}</Text>
+                </View>
+              )}
+            />
+          </ScrollView>
+        </Layout>
+      )}
     </View>
   );
 }
@@ -242,12 +262,13 @@ export default function Search({ navigation }) {
 const styles = StyleSheet.create({
   input: {
     height: 40,
-    marginTop: "5%",
+    marginTop: 40,
+    paddingHorizontal: 5,    
   },
   container: {
     flex: 1,
     flexDirection: "column",
-    height: "100%",
+    height: ScreenHeight,
   },
 
   layout: {},

@@ -17,6 +17,7 @@ import {
   ScrollView,
   Image,
   ImageBackground,
+  Dimensions,
 } from "react-native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { NavigationContainer } from "@react-navigation/native";
@@ -34,7 +35,8 @@ import {
   Popover,
   Layout,
 } from "@ui-kitten/components";
-
+const screenHeight = Dimensions.get("screen").height;
+const screenWidth = Dimensions.get("screen").width;
 export default function PoiProfile({ navigation, route }) {
   const { poiId } = route.params;
   const { companyId } = route.params;
@@ -67,81 +69,87 @@ export default function PoiProfile({ navigation, route }) {
   return isLoading ? (
     <Spinner></Spinner>
   ) : (
-    <ScrollView style={styles.container}>
-      <ImageBackground
-        style={styles.image}
-        source={{ uri: poi[`picture${currentImage + 1}`] }}
-      >
-        <View
-          style={[
-            StyleSheet.absoluteFill,
-            { backgroundColor: "rgba(0, 0, 0, 0.45)" },
+    <View style={styles.container}>
+      <ScrollView>
+        <ImageBackground
+          style={styles.image}
+          source={{ uri: poi[`picture${currentImage + 1}`] }}
+        >
+          <View
+            style={[
+              StyleSheet.absoluteFill,
+              { backgroundColor: "rgba(0, 0, 0, 0.45)" },
+            ]}
+          />
+        </ImageBackground>
+        <Card style={styles.bookingCard} appearance="filled" disabled={true}>
+          <Text style={styles.title} category="h6">
+            {poi.name.toUpperCase()}
+          </Text>
+          <Text style={styles.rentLabel} appearance="hint" category="p2">
+            {category.name.toUpperCase()}
+          </Text>
+          <Text style={styles.priceLabel} category="h6">
+            {poi.location.toUpperCase()}
+          </Text>
+          <Button style={styles.bookButton} onPress={(onBookButtonPress) => {}}>
+            BOOK NOW
+          </Button>
+        </Card>
+        <Text style={styles.sectionLabel} category="s1">
+          About
+        </Text>
+        <Text style={styles.description} appearance="hint">
+          {poi.description}
+        </Text>
+        <Text style={styles.sectionLabel} category="h4">
+          Photos
+        </Text>
+
+        <List
+          contentContainerStyle={styles.imagesList}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          data={[
+            poi.picture1,
+            poi.picture2,
+            poi.picture3,
+            poi.picture4,
+            poi.picture5,
+            poi.picture6,
           ]}
-        />
-      </ImageBackground>
-      <Card style={styles.bookingCard} appearance="filled" disabled={true}>
-        <Text style={styles.title} category="h6">
-          {poi.name.toUpperCase()}
-        </Text>
-        <Text style={styles.rentLabel} appearance="hint" category="p2">
-          {category.name.toUpperCase()}
-        </Text>
-        <Text style={styles.priceLabel} category="h6">
-          {poi.location.toUpperCase()}
-        </Text>
-        <Button style={styles.bookButton} onPress={(onBookButtonPress) => {}}>
-          BOOK NOW
-        </Button>
-      </Card>
-      <Text style={styles.sectionLabel} category="s1">
-        About
-      </Text>
-      <Text style={styles.description} appearance="hint">
-        {poi.description}
-      </Text>
-      <Text style={styles.sectionLabel} category="h4">
-        Photos
-      </Text>
-      <List
-        contentContainerStyle={styles.imagesList}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        data={[
-          poi.picture1,
-          poi.picture2,
-          poi.picture3,
-          poi.picture4,
-          poi.picture5,
-          poi.picture6,
-        ]}
-        renderItem={({ item, index }) => (
-          <Popover
-            backdropStyle={styles.backdrop}
-            visible={visible}
-            anchor={() => (
-              <ImageBackground style={styles.imageItem} source={{ uri: item }}>
-                <Button
-                  key={index}
-                  onPress={() => showPicture(item)}
-                  style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+          renderItem={({ item, index }) => (
+            <Popover
+              backdropStyle={styles.backdrop}
+              visible={visible}
+              anchor={() => (
+                <ImageBackground
+                  style={styles.imageItem}
+                  source={{ uri: item }}
                 >
-                  Show
-                </Button>
-              </ImageBackground>
-            )}
-            onBackdropPress={() => setVisible(false)}
-          >
-            <Layout style={styles.content}>
-              <Icon style={styles.contentIcon} name="close"></Icon>
-              <ImageBackground
-                style={styles.imageFull}
-                source={{ uri: currentImage }}
-              />
-            </Layout>
-          </Popover>
-        )}
-      />
-    </ScrollView>
+                  <Button
+                    key={index}
+                    onPress={() => showPicture(item)}
+                    style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+                  >
+                    Show
+                  </Button>
+                </ImageBackground>
+              )}
+              onBackdropPress={() => setVisible(false)}
+            >
+              <View style={styles.content}>
+                {/* <Icon style={styles.contentIcon} name="close"></Icon> */}
+                <ImageBackground
+                  style={styles.content}
+                  source={{ uri: currentImage }} 
+                />
+              </View>
+            </Popover>
+          )}
+        />
+      </ScrollView>
+    </View>
   );
 }
 
@@ -221,20 +229,21 @@ const themedStyles = StyleService.create({
   },
   content: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    // paddingHorizontal: 1,
-    // paddingVertical: 8,
-    width: "100%",
+    justifyContent: "center",
+    alignItem: "center",
+    width: screenWidth,
+    height: screenHeight / 2,
+    padding: 8,
+    margin: 0,
   },
   backdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   imageFull: {
-    width: 300,
-    height: 500,
-    borderRadius: 8,
-    marginHorizontal: 8,
+    // width: 300,
+    // height: 500,
+    // borderRadius: 8,
+    // marginHorizontal: 8,
   },
   contentIcon: {
     color: "white",

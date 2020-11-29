@@ -18,7 +18,7 @@ import Search from "./components/Search/Search";
 import Scan from "./components/Scan/Scan";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import { Icon } from "native-base";
+
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import {
@@ -40,19 +40,19 @@ export default function App() {
   const [isAllerted, setisAlerted] = useState(false);
   const [isFirstOpening, SetIsFirstOpening] = useState(true);
   // const PersonIcon = (props) => <Icon {...props} name="person-outline" />;
-  const PersonIcon = (props) => <Icon {...props} name="home-outline" />;
+  const HomeIcon = (props) => <Icon {...props} name="home-outline" />;
 
-  const BellIcon = (props) => <Icon {...props} name="search-outline" />;
+  const SearchIcon = (props) => <Icon {...props} name="search-outline" />;
 
-  const EmailIcon = (props) => <Icon {...props} name="camera" />;
+  const ScanIcon = (props) => <Icon {...props} name="camera" />;
   const BottomTabBar = ({ navigation, state }) => (
     <BottomNavigation
       selectedIndex={state.index}
       onSelect={(index) => navigation.navigate(state.routeNames[index])}
     >
-      <BottomNavigationTab title="Home Page" icon={PersonIcon} />
-      <BottomNavigationTab title="Search" icon={BellIcon} />
-      <BottomNavigationTab title="Scan" icon={EmailIcon} />
+      <BottomNavigationTab title="Home Page" icon={HomeIcon} />
+      <BottomNavigationTab title="Search" icon={SearchIcon} />
+      <BottomNavigationTab title="Scan" icon={ScanIcon} />
     </BottomNavigation>
   );
   useEffect(() => {
