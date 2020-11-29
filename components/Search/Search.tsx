@@ -5,7 +5,7 @@ import { Container, Header, Content, ListItem, Right, Item } from "native-base";
 import {
   Input,
   Layout,
-fixed   Icon,
+  Icon,
   Button,
   Text,
   List,
@@ -38,7 +38,7 @@ import PoiProfile from "../POI/PoiProfile";
 import ShowPoiFromScan from "../Scan/ShowPoiFromScan";
 import { FlatList } from "react-native-gesture-handler";
 import { SafeAreaConsumer, SafeAreaView } from "react-native-safe-area-context";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 
 export default function Search({ navigation }) {
   const [query, setQuery] = useState("");
@@ -181,7 +181,7 @@ export default function Search({ navigation }) {
             data={[...result.companies, ...result.pois]}
             renderItem={({ item, index }) => (
               <Card
-                key={uuidv4()}
+                key={index}
                 style={styles.item}
                 header={() => (
                   <ImageBackground
