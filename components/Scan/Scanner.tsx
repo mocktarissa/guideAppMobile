@@ -53,12 +53,14 @@ export default function Scanner({ navigation }) {
   ]);
   const fetchData = async (data) => {
     try {
-      const resultTemp = await axios(
+      const resultTemp = await axios.get(
         `http://myguideapi.herokuapp.com/api/qrcode/${data}`
       );
       setScanned(false);
       setResult(resultTemp.data);
-      setisAlerted(true);
+      navigation.navigate("ShowPoiFromScan", {
+        data: result,
+      });
     } catch (e) {
       alert("Not Found");
     }
@@ -81,27 +83,7 @@ export default function Scanner({ navigation }) {
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       >
-        <Popover
-          backdropStyle={styles.backdrop}
-          visible={isAllerted}
-          anchor={() => <Layout></Layout>}
-          onBackdropPress={() => setisAlerted(false)}
-        >
-          <Layout style={styles.content}>
-            <Text category="s1">{result[0].name}</Text>
-            <Button
-              style={styles.buttonRescan}
-              onPress={() => {
-                navigation.navigate("ShowPoiFromScan", {
-                  data: result,
-                });
-                setisAlerted(false);
-              }}
-            >
-              SHOW
-            </Button>
-          </Layout>
-        </Popover>
+        <Layout></Layout>
       </BarCodeScanner>
       {scanned && (
         <Button style={styles.buttonRescan} onPress={() => setScanned(false)}>

@@ -70,7 +70,7 @@ export default function Search({ navigation }) {
 
     const fetchData = async () => {
       setResult({ companies: [], pois: [] });
-      const searchResult = await axios(
+      const searchResult = await axios.get(
         `http://myguideapi.herokuapp.com/api/search?query=${query}`
       );
       if (
@@ -79,21 +79,22 @@ export default function Search({ navigation }) {
       )
         setSearchResult("Not Found");
       else setResult(searchResult.data);
-      console.log({
-        length:
-          searchResult.data.companies.length + searchResult.data.pois.length,
-      });
+      // console.log({
+      //   length:
+      //     searchResult.data.companies.length + searchResult.data.pois.length,
+      // });
     };
 
     fetchData();
 
     setSearching(false);
     setQuery("");
-    console.log(result);
+    // console.log(result);
   }
 
   function cancel() {
     setQuery("");
+    setResult({ companies: [], pois: [] });
   }
   const renderItemHeader = ({ company }) => (
     <ImageBackground style={styles.itemHeader} source={company.logo}>
@@ -194,60 +195,61 @@ export default function Search({ navigation }) {
               contentContainerStyle={styles.listContent}
               data={[...result.companies, ...result.pois]}
               renderItem={({ item, index }) => (
-                <Card
-                  key={index}
-                  style={styles.item}
-                  header={() => (
-                    <ImageBackground
-                      style={styles.itemHeader}
-                      source={{ uri: item.logo || item.picture1 }}
-                    >
-                      <View
-                        style={[
-                          StyleSheet.absoluteFill,
-                          styles.itemHeaderDetails,
-                        ]}
+                <>
+                  <Card
+                    key={index}
+                    style={styles.item}
+                    header={() => (
+                      <ImageBackground
+                        style={styles.itemHeader}
+                        source={{ uri: item.logo || item.picture1 }}
                       >
-                        <Text category="h4" status="control">
-                          {item.name}
-                        </Text>
-                        <Text category="s1" status="control">
-                          {item.city}
-                        </Text>
-                      </View>
-                    </ImageBackground>
-                  )}
-                  onPress={() => {
-                    item.hasOwnProperty("picture1")
-                      ? navigation.navigate("Poi Profile", {
-                          poiId: item.id,
-                          companyId: item.company_id,
-                        })
-                      : navigation.navigate("Company Details", {
-                          companyId: item.id,
-                        });
-                  }}
-                >
-                  <Layout style={styles.itemStyxContainer} level="2">
-                    <Text style={styles.itemStyxText} category="h6">
-                      {item.name}
+                        <View
+                          style={[
+                            StyleSheet.absoluteFill,
+                            styles.itemHeaderDetails,
+                          ]}
+                        >
+                          <Text category="h4" status="control">
+                            {item.name}
+                          </Text>
+                          <Text category="s1" status="control">
+                            {item.city}
+                          </Text>
+                        </View>
+                      </ImageBackground>
+                    )}
+                    onPress={() => {
+                      item.hasOwnProperty("picture1")
+                        ? navigation.navigate("Poi Profile", {
+                            poiId: item.id,
+                            companyId: item.company_id,
+                          })
+                        : navigation.navigate("Company Details", {
+                            companyId: item.id,
+                          });
+                    }}
+                  >
+                    <Layout style={styles.itemStyxContainer} level="2">
+                      <Text style={styles.itemStyxText} category="h6">
+                        {item.name}
+                      </Text>
+                      <Button
+                        style={styles.itemStyxButton}
+                        size="tiny"
+                        icon={ClockIcon}
+                      >
+                        {item.location || item.city}
+                      </Button>
+                    </Layout>
+                    <Text style={styles.itemDescription} category="s1">
+                      {item.description && item.description.slice(0, 125)} ...
                     </Text>
-                    <Button
-                      style={styles.itemStyxButton}
-                      size="tiny"
-                      icon={ClockIcon}
-                    >
-                      {item.location || item.city}
-                    </Button>
-                  </Layout>
-                  <Text style={styles.itemDescription} category="s1">
-                    {item.description && item.description.slice(0, 125)} ...
-                  </Text>
-                </Card>
+                  </Card>
+                </>
               )}
               ListEmptyComponent={() => (
                 <View style={styles.container}>
-                  <Spinner size="giant"></Spinner>
                   <Text>{searchResult}</Text>
                 </View>
               )}
@@ -263,7 +265,7 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     marginTop: 40,
-    paddingHorizontal: 5,    
+    paddingHorizontal: 5,
   },
   container: {
     flex: 1,
@@ -319,6 +321,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 4,
     marginHorizontal: -8,
+    backgroundColor: "rgb(245,255,250)",
   },
   itemStyxText: {
     marginHorizontal: 16,
